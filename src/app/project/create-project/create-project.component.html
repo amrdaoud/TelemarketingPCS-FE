@@ -1,0 +1,176 @@
+<mat-card style="margin: 5px;">
+  <mat-card-title>Create New Project</mat-card-title>
+  <mat-card-content>
+    <mat-stepper linear  labelPosition="bottom" #stepper>
+      <mat-step [stepControl]="firstFormGroup">
+        <form [formGroup]="firstFormGroup">
+          <ng-template matStepLabel>Fill out project details</ng-template>
+
+          <mat-card style="margin: 5px;">
+            <mat-form-field >
+              <mat-label>Name</mat-label>
+              <input matInput placeholder="Enter your project name" formControlName="name" required>
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Quota</mat-label>
+              <input type="number" matInput placeholder="Enter quota project" formControlName="quota" required>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+              <mat-label>Date From</mat-label>
+              <input matInput  [matDatepicker]="picker" formControlName="dateFrom">
+              <mat-hint>MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+
+            <mat-form-field class="example-full-width">
+              <mat-label>Date To</mat-label>
+              <input  matInput  [matDatepicker]="picker2" formControlName="dateTo">
+              <mat-hint>MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+
+            @if (firstFormGroup.get("dateTo").errors?.['confirmedValidator'])
+            {
+              <h5 style=" color: red;">
+                DateTo must greater than DateFrom
+              </h5>
+
+            }
+
+
+            <mat-form-field>
+              <mat-label>Type</mat-label>
+              <mat-select formControlName="projectTypeID">
+                @for (f of typeData; track f) {
+                  <mat-option [value]="f.id">{{f.name}}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+
+          </mat-card>
+
+          <div>
+            <button mat-button matStepperNext [disabled]="!firstFormGroup.valid">Next</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="secondFormGroup">
+        <mat-label>Download template</mat-label>
+       <a href="assets/GSMs.xlsx">
+        <mat-icon>file_download</mat-icon>
+       </a>
+
+        <br><br>
+
+        <form [formGroup]="secondFormGroup">
+          <ng-template matStepLabel>Upload GSM file</ng-template>
+          <button  mat-stroked-button color="primary">
+            <input type="file" accept=".xlsx" (change)="readExcelFile($event)" formControlName="file" />
+          </button>
+          <br>
+          @if (isLoad)
+          {
+            <mat-form-field style="width: 100%;">
+              <mat-label>Filter</mat-label>
+              <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
+            </mat-form-field>
+            <mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="margin: 5px;">
+
+              <ng-container matColumnDef="gsm">
+                <mat-header-cell *matHeaderCellDef> GSM </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.GSM}} </mat-cell>
+              </ng-container>
+
+              <!-- Name Column -->
+              <ng-container matColumnDef="type">
+                <mat-header-cell *matHeaderCellDef> Type </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.Type}} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="Extra1">
+                <mat-header-cell *matHeaderCellDef> Extra1 </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.Extra1}} </mat-cell>
+              </ng-container>
+
+
+              <ng-container matColumnDef="Extra2">
+                <mat-header-cell *matHeaderCellDef> Extra2 </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.Extra2}} </mat-cell>
+              </ng-container>
+
+
+              <ng-container matColumnDef="Extra3">
+                <mat-header-cell *matHeaderCellDef> Extra3 </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.Extra3}} </mat-cell>
+              </ng-container>
+
+
+              <ng-container matColumnDef="Extra4">
+                <mat-header-cell *matHeaderCellDef> Extra4 </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.Extra4}} </mat-cell>
+              </ng-container>
+
+
+              <ng-container matColumnDef="Extra5">
+                <mat-header-cell *matHeaderCellDef> Extra5 </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.Extra5}} </mat-cell>
+              </ng-container>
+
+
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+             <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+             <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+            </tr>
+            </mat-table>
+
+          }
+
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext [disabled]="!isLoad">Next</button>
+          </div>
+        </form>
+
+      </mat-step>
+      <mat-step [stepControl]="thirdFormGroup">
+        <form [formGroup]="thirdFormGroup">
+          <ng-template matStepLabel>File out telemarketers</ng-template>
+          <mat-form-field style="width: 40%;">
+            <mat-label>Telemarketers</mat-label>
+            <mat-select formControlName="employeeIDS" multiple>
+              @for (f of employeeData; track f) {
+                <mat-option [value]="f.id">{{f.userName}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext [disabled]="!thirdFormGroup.valid">Next</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step>
+
+        <ng-template matStepLabel>Done</ng-template>
+        <mat-progress-bar mode="indeterminate" *ngIf="(projservice.loadingCreate$ | async)"></mat-progress-bar>
+
+        <p>Congratulations ,You are now done.</p>
+        <div class="btnClass">
+          <button mat-raised-button matStepperPrevious style="margin: 5px;">Back</button>
+          <button mat-raised-button color="warn" (click)="stepper.reset()" style="margin: 5px;">Reset</button>
+          <button mat-raised-button color="primary"  style="margin: 5px;" (click)="createProject()">Submit</button>
+
+        </div>
+      </mat-step>
+    </mat-stepper>
+
+  </mat-card-content>
+</mat-card>

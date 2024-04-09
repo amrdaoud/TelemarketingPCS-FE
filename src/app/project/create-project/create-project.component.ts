@@ -39,7 +39,8 @@ export class CreateProjectComponent implements OnInit
   employeeData:employeeList[];
   typeData:typeList[];
   excelData:any=null;
-  displayedColumns: string[] = ['gsm','type','Extra1','Extra2','Extra3','Extra4','Extra5'];
+  displayedColumns: string[] = ['GSM','LineType','CallStatus','Generation','Region','City','Segment',
+  'SubSegment','Bundle','Contract','AlternativeNumber','Note'];
   dataSource:any;
   isLoad:boolean=false;
   firstFormGroup:FormGroup;
@@ -55,7 +56,7 @@ export class CreateProjectComponent implements OnInit
       dateFrom: ['', Validators.required],
       dateTo: ['', Validators.required],
       quota: ['', Validators.required],
-      projectTypeID: ['', Validators.required]
+      type:['',Validators.required]
 
     },
     { validators: this.ConfirmedValidator('dateFrom','dateTo') }
@@ -70,7 +71,7 @@ export class CreateProjectComponent implements OnInit
   }
   ngOnInit(): void {
     this.getEmployeeList();
-    this.getTypeList();
+    this.getProjectType();
   }
 
 
@@ -104,7 +105,16 @@ export class CreateProjectComponent implements OnInit
             const sheetname= workbook.SheetNames[0];
             const sheet1 = workbook.Sheets[sheetname]
             this.excelData=xls.utils.sheet_to_json(sheet1,{raw:true});
-            if(!this.uploadExcelValidation(this.excelData))
+            console.log(this.excelData)
+            //-------------------Get Header----------------------
+             // extract header from excel
+        const headers: string[] = [];
+        const columnCount = xls.utils.decode_range(sheet1['!ref'] || '').e.c + 1; // get col count !ref is range A1:G1
+        for (let i = 0; i < columnCount; ++i) {
+          headers[i] = sheet1[`${xls.utils.encode_col(i)}1`].v; // get values of 1 col
+        }
+
+            if(!this.uploadExcelValidation(headers))
             {
               this.openSnackBar("Excel file has invalid column","Close")
 
@@ -121,7 +131,6 @@ export class CreateProjectComponent implements OnInit
 
 
   }
-
    createProject()
    {
     var formData: any = new FormData();
@@ -129,7 +138,7 @@ export class CreateProjectComponent implements OnInit
     formData.append('dateFrom', formatDate(this.firstFormGroup.get("dateFrom").value,'yyyy/MM/dd', "en-US"));
     formData.append('dateTo', formatDate(this.firstFormGroup.get("dateTo").value,'yyyy/MM/dd', "en-US"));
     formData.append('quota', this.firstFormGroup.get("quota").value);
-    formData.append('projectTypeID', this.firstFormGroup.get("projectTypeID").value);
+    formData.append('type', this.firstFormGroup.get("type").value);
     formData.append('GSMsFile', this.uploadFile);
     formData.append('employeeIDS',this.thirdFormGroup.get("employeeIDS").value.toString());
     formData.append('CreatedBy', 'MHDISM');
@@ -159,15 +168,7 @@ export class CreateProjectComponent implements OnInit
     )
   }
 
-  getTypeList()
-  {
-    this.projservice.getTypes().subscribe((data)=>
-    {
-      this.typeData=data;
 
-    }
-    )
-  }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -177,13 +178,22 @@ export class CreateProjectComponent implements OnInit
   uploadExcelValidation(data:any):boolean
   {
 
-    if( data[0].hasOwnProperty('GSM') && data[0].hasOwnProperty('Type') && data[0].hasOwnProperty('Extra1')
-       && data[0].hasOwnProperty('Extra2') && data[0].hasOwnProperty('Extra3') && data[0].hasOwnProperty('Extra4')
-       && data[0].hasOwnProperty('Extra5'))
+    console.log(data)
+    if( data.includes('GSM') && data.includes('LineType') && data.includes('CallStatus')
+       && data.includes('Generation') && data.includes('Region') && data.includes('City')
+       && data.includes('Segment') && data.includes('SubSegment') && data.includes('Bundle')
+       && data.includes('Contract') && data.includes('AlternativeNumber') && data.includes('Note'))
        {
            return true;
        }
        return false;
 
+  }
+
+  getProjectType()
+  {
+    this.projservice.getTypes().subscribe((res)=>{
+      this.typeData=res;
+    })
   }
 }

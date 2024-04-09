@@ -43,11 +43,12 @@ export class EditProjectComponent implements OnInit {
   firstFormGroup:FormGroup;
   employeeData:employeeList[];
   typeData:typeList[];
-  statusData: typeList[];
+  statusData:typeList[];
   isLoad:boolean=false;
-  displayedColumns: string[] = ['id','gsm', 'lineType', 'employeeUserName','extra1','extra2','extra3','extra4','extra5','callStatusType','note'];
+  displayedColumns: string[] = ['gsm','userName','callStatusName','lineTypeName','generationName',
+  'regionName','cityName','segment','subSegment','bundle','contract','alternativeNumber','note'];
   dataSource= new MatTableDataSource<projectDetails>([]);
-
+  ConvertedData:projectDetails[];
   newDataSource:projectDetails[]=[];
   private currentEmp = new BehaviorSubject<projectDetails[]>([]);
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -69,13 +70,9 @@ export class EditProjectComponent implements OnInit {
     });
 
     this.getEmployeeList();
-    this.getTypeList();
-    this.getStatusList();
     this.getById();
-
-
-
-    console.log( 'ssss'+ this.dataSource.paginator)
+    this.getStataus();
+    this.getProjectType();
   }
 
   ConfirmedValidator(controlName: string, matchingControlName: string) {
@@ -104,14 +101,24 @@ export class EditProjectComponent implements OnInit {
         id:[element.id],
         gsm:[element.gsm],
         note:[element.note],
-        projectId:[element.projectId],
-        projectName:[element.projectName],
         employeeID:[element.employeeID],
-        employeeUserName:[element.employeeUserName],
-        lineTypeID:[element.lineTypeID],
+        userName:[element.userName],
         lineType:[element.lineType],
-        callStatusID:[element.callStatusID],
-        callStatusType:[element.callStatusType],
+        callStatus:[element.callStatus],
+        generation:[element.generation],
+        region:[element.region],
+        city:[element.city],
+        segment:[element.segment],
+        subSegment:[element.subSegment],
+        bundle:[element.bundle],
+        contract:[element.contract],
+        alternativeNumber:[element.alternativeNumber],
+        lineTypeName:[element.lineTypeName],
+        callStatusName:[element.callStatusName],
+        generationName:[element.generationName],
+        regionName:[element.regionName],
+        cityName:[element.cityName],
+
 
       });
       this.items.push(elm);
@@ -145,23 +152,14 @@ export class EditProjectComponent implements OnInit {
     )
   }
 
-  getTypeList()
-  {
-    this.projectService.getTypes().subscribe((data)=>
-    {
-      this.typeData=data;
-    }
-    )
-  }
+
 
   openDialog(row:any): void {
     const dialogRef = this.dialog.open(EditDialogComponent, {
       data: {details:row,employeelis:this.employeeData,status:this.statusData}, height: '300px',
       width: '400px',
     });
-
     dialogRef.afterClosed().subscribe(result => {
-
        let index = this.newDataSource.findIndex(x => x.id === result.details.id);
        if(index===-1)
        {
@@ -184,14 +182,7 @@ export class EditProjectComponent implements OnInit {
     this._snackBar.open(message, action);
   }
 
-  getStatusList()
-  {
-    this.projectService.getStatus().subscribe((data)=>
-    {
-      this.statusData=data;
-    }
-    )
-  }
+
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -205,7 +196,7 @@ export class EditProjectComponent implements OnInit {
   getById(){
     this.projectService.getById(this.empId).subscribe((data)=>{
       this.empDetails=data;
-      this.dataSource = new MatTableDataSource(this.empDetails.projectDetails);
+      this.dataSource = new MatTableDataSource( this.empDetails.projectDetails);
       this.currentEmp.next(this.empDetails.projectDetails);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -215,7 +206,7 @@ export class EditProjectComponent implements OnInit {
         dateFrom: [this.empDetails.dateFrom, Validators.required],
         dateTo: [this.empDetails.dateTo, Validators.required],
         quota: [this.empDetails.quota, Validators.required],
-        projectTypeID: [this.empDetails.typeId, Validators.required],
+        type: [this.empDetails.type, Validators.required],
         projectDetails: this._formBuilder.array([])
       },
       { validators: this.ConfirmedValidator('dateFrom','dateTo')
@@ -231,7 +222,8 @@ export class EditProjectComponent implements OnInit {
   {
     this.empDetails.projectDetails.forEach((d)=>{
       let convertData= Object.keys(d).filter(objKey =>
-         (objKey !== 'employeeID'  && objKey !== 'lineTypeID' && objKey !== 'callStatusID'))
+         (objKey !== 'id'  && objKey !== 'lineType' && objKey !== 'callStatus'
+         && objKey !== 'region' && objKey !== 'city' && objKey !== 'employeeID'  && objKey !== 'generation'))
          .reduce((newObj, key) =>
          {
              newObj[key] = d[key];
@@ -253,5 +245,20 @@ export class EditProjectComponent implements OnInit {
     XLSX.writeFile(wb, 'Distribution.xlsx');
 
   }
+
+ getStataus()
+ {
+  this.projectService.getStatus().subscribe((res)=>{
+    this.statusData=res
+  })
+ }
+
+  getProjectType()
+  {
+    this.projectService.getTypes().subscribe((res)=>{
+      this.typeData=res;
+    })
+  }
+
 }
 

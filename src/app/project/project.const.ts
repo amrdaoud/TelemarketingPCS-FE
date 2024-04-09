@@ -5,9 +5,7 @@ export interface projectListDto
   dateFrom:Date;
   dateTo:Date;
   quota:number;
-  createdBy:string;
-  typeName:string;
-  typeId:number;
+  type:string;
 }
 
 export interface typeList
@@ -27,14 +25,23 @@ export interface projectDetails
    id:number;
    gsm:string;
    note:string;
-   projectId:number;
-   projectName:string;
    employeeID:number;
-   employeeUserName:string;
-   lineTypeID:number;
+   userName:string;
    lineType:string;
-   callStatusID:number;
-   callStatusType:string;
+   callStatus:string;
+   generation:string;
+   region:string;
+   city:string;
+   segment:string;
+   subSegment:string;
+   bundle:string;
+   contract:string;
+   alternativeNumber:string;
+   lineTypeName:string;
+   callStatusName:string;
+   generationName:string;
+   regionName:string;
+   cityName:string;
 }
 
 export interface projectDetailsList extends projectListDto

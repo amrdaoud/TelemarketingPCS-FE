@@ -27,12 +27,12 @@ export const items: IconNavItemWithRoles[] = [
     postition: 'top',
     children: [
       {
-        title: 'All Project',
+        title: 'Project List',
         svgIcon: LIST_ICON,
         routerLink: 'projects'
       },
       {
-        title: 'Chart',
+        title: 'Statistics',
         svgIcon: DASHBOARD_ICON,
         routerLink: 'charts',
       }

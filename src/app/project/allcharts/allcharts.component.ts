@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { map } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
@@ -10,16 +10,41 @@ import { RadarComponent } from '../charts/radar/radar.component';
 import { DataTableComponent } from '../charts/data-table/data-table.component';
 //----------------------------------------------
 import {MatGridListModule} from '@angular/material/grid-list';
+import {NumberCounterComponent} from './../charts/number-counter/number-counter.component';
+import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 
 @Component({
   selector: 'app-allcharts',
   standalone: true,
   imports: [MatGridListModule,CommonModule,CardComponent,BarComponent,LineComponent,
-    PieComponent,RadarComponent,DataTableComponent],
+    PieComponent,RadarComponent,DataTableComponent,NumberCounterComponent],
   templateUrl: './allcharts.component.html',
   styleUrl: './allcharts.component.scss'
 })
-export class AllchartsComponent {
+export class AllchartsComponent implements OnInit {
+  constructor(){}
+
+  ngOnInit(): void {
+    this.hubConnectionBuilder = new HubConnectionBuilder()
+      .withUrl('https://api.excylate.com:81/signalr/general')
+      .configureLogging(LogLevel.Information)
+      .build();
+    this.hubConnectionBuilder
+      .start()
+      .then(() => console.log('Connection started.......!'))
+      .catch(err => console.log('Error while connect with server'));
+    this.hubConnectionBuilder.on('ReceiveNotification', (result: any) => {
+      console.log(result)
+
+      this.offers.push(result);
+       console.log(this.offers)
+    });
+
+
+  }
+  private hubConnectionBuilder!: HubConnection;
+  offers: any[] = [];
+
   private breakpointObserver = inject(BreakpointObserver);
 
   cardLayout = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
@@ -41,4 +66,37 @@ export class AllchartsComponent {
       };
     })
   );
+
+  counters = [
+    {
+      id: "002",
+      label: "Customers served ",
+      number: "2000",
+      duration: "0.4",
+      cardTitle:"Served"
+
+    },
+    {
+      id: "003",
+      label: "Current customers",
+      number: "1400",
+      duration: "0.4",
+      cardTitle:"Customers"
+    },
+    {
+      id: "004",
+      label: "customer Complaints",
+      number: "250",
+      duration: "0.4",
+      cardTitle:"Complaints"
+    },
+    {
+      id: "004",
+      label: "Syriatel telemarketers",
+      number: "250",
+      duration: "0.4",
+      cardTitle:"Telemarketers"
+
+    }
+  ];
 }

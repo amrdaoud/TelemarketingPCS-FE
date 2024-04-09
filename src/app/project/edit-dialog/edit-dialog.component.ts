@@ -28,12 +28,14 @@ export class EditDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,protected projectService:HttpService
   )
   {
+
   }
 
 
   onNoClick(): void {
-    this.data.details.employeeUserName=this.data.employeelis.filter(x=>x.id===this.data.details.employeeID)[0].userName;
-    this.data.details.callStatusType=this.data.status.filter(x=>x.id===this.data.details.callStatusID)[0].name;
+    this.data.details.userName=this.data.employeelis.filter(x=>x.id===this.data.details.employeeID)[0].userName;
+    this.data.details.callStatus=this.data.status.filter(x=>x.id===this.data.details.callStatus)[0].id;
+    this.data.details.callStatusName=this.data.status.filter(x=>x.id===this.data.details.callStatus)[0].name;
 
     this.dialogRef.close(this.data);
   }

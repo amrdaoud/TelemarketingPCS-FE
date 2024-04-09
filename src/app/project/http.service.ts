@@ -54,13 +54,10 @@ export class HttpService {
 
   getEmployees():Observable<employeeList[]>
   {
-     return this.httpClient.get<employeeList[]>(this.url+"getAllEmployees");
+     return this.httpClient.get<employeeList[]>(this.url+"getEmployees");
   }
 
-  getTypes():Observable<typeList[]>
-  {
-     return this.httpClient.get<typeList[]>(this.url+"getAllProjectTypes");
-  }
+
 
    getById(id:number):Observable<projectDetailsList>
    {
@@ -81,10 +78,34 @@ export class HttpService {
     return this.httpClient.delete<number>(this.url+"delete?id="+id);
   }
 
+  getTypes():Observable<typeList[]>
+  {
+    return this.httpClient.get<typeList[]>(this.url+"getProjectTypes")
+  }
+
   getStatus():Observable<typeList[]>
   {
-    return this.httpClient.get<typeList[]>(this.url+"getAllCallStatus");
+    return this.httpClient.get<typeList[]>(this.url+"getCallStatuses")
+  }
 
+  getLineType():Observable<typeList[]>
+  {
+    return this.httpClient.get<typeList[]>(this.url+"getLineTypes")
+  }
+
+  getRegion():Observable<typeList[]>
+  {
+    return this.httpClient.get<typeList[]>(this.url+"getRegions")
+  }
+
+  getCities():Observable<typeList[]>
+  {
+    return this.httpClient.get<typeList[]>(this.url+"getCities")
+  }
+
+  getGeneration():Observable<typeList[]>
+  {
+    return this.httpClient.get<typeList[]>(this.url+"getLineGenerations")
   }
 
 }

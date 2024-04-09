@@ -15,11 +15,11 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
-import { projectListDto } from '../project.const';
+import { projectListDto, typeList } from '../project.const';
 import { FilterModel } from '../../common/generic';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { DialogComponent } from '../dialog/dialog.component';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 
 
@@ -48,7 +48,7 @@ export class ProjectListComponent {
   pageSize:number;
   pageIndex:number;
   previousPageIndex:number;
-
+  typeData:typeList[];
   constructor( protected projservice:HttpService,private router: Router,
     public dialog: MatDialog,private _snackBar: MatSnackBar,
      private changeDetectorRefs: ChangeDetectorRef){
@@ -69,7 +69,7 @@ export class ProjectListComponent {
 
        this.projservice.getProjects(filter)
       .subscribe((response: { data: projectListDto[]; dataSize: number }) => {
-        this.dataSource.data=response.data;
+        this.dataSource.data= response.data;
         this.totalItems = response.dataSize;
         this.changeDetectorRefs.detectChanges();
       });
@@ -110,11 +110,11 @@ exportexcel(): void
   {
 
     this.projservice.getExcelProjects(this.excelFilter).subscribe((res)=>{
-      this.excelData=res.data
+      this.excelData= res.data
     })
     this.excelData.forEach((d)=>{
      let convertData= Object.keys(d).filter(objKey =>
-        (objKey !== 'typeId'  && objKey !== 'isDeleted' && objKey !== 'typeId' && objKey !== 'projectDetails'))
+        (objKey !== 'type'  && objKey !== 'isDeleted' && objKey !== 'projectDetails'))
         .reduce((newObj, key) =>
         {
             newObj[key] = d[key];
@@ -157,6 +157,9 @@ exportexcel(): void
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action);
   }
+
+
+
 }
 
 

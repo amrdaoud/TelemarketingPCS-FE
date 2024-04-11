@@ -50,7 +50,7 @@
       <br>
       <mat-label>Type</mat-label>
       <mat-form-field>
-        <mat-select formControlName="type">
+        <mat-select formControlName="typeId">
           @for (f of typeData; track f) {
             <mat-option [value]="f.id">{{f.name}}</mat-option>
           }
@@ -64,7 +64,7 @@
       <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
     </mat-form-field>
 
-    <div class="mat-elevation-z8">
+    <section class="example-container mat-elevation-z8" tabindex="0">
       <table mat-table [dataSource]="dataSource" matSort id="excel-table">
 
         <!-- ID Column -->
@@ -73,37 +73,37 @@
           <td mat-cell *matCellDef="let row"> {{row.gsm}} </td>
         </ng-container>
 
-        <ng-container matColumnDef="userName">
+        <ng-container matColumnDef="employeeUserName">
           <th mat-header-cell *matHeaderCellDef > Employee </th>
-          <td mat-cell *matCellDef="let row"> {{row.userName}} </td>
+          <td mat-cell *matCellDef="let row"> {{row.employeeUserName}} </td>
         </ng-container>
 
         <!-- Progress Column -->
-        <ng-container matColumnDef="callStatusName">
+        <ng-container matColumnDef="callStatus">
           <th mat-header-cell *matHeaderCellDef > Status </th>
-          <td mat-cell *matCellDef="let row"> {{row.callStatusName}} </td>
+          <td mat-cell *matCellDef="let row"> {{row.callStatus}} </td>
         </ng-container>
 
         <!-- Name Column -->
-        <ng-container matColumnDef="lineTypeName">
+        <ng-container matColumnDef="lineType">
           <th mat-header-cell *matHeaderCellDef > Type </th>
-          <td mat-cell *matCellDef="let row"> {{row.lineTypeName}} </td>
+          <td mat-cell *matCellDef="let row"> {{row.lineType}} </td>
         </ng-container>
 
         <!-- Fruit Column -->
-        <ng-container matColumnDef="generationName">
+        <ng-container matColumnDef="generation">
           <th mat-header-cell *matHeaderCellDef > Generation  </th>
-          <td mat-cell *matCellDef="let row"> {{row.generationName}} </td>
+          <td mat-cell *matCellDef="let row"> {{row.generation}} </td>
         </ng-container>
 
-        <ng-container matColumnDef="regionName">
+        <ng-container matColumnDef="region">
           <th mat-header-cell *matHeaderCellDef > Region  </th>
-          <td mat-cell *matCellDef="let row"> {{row.regionName}} </td>
+          <td mat-cell *matCellDef="let row"> {{row.region}} </td>
         </ng-container>
 
-        <ng-container matColumnDef="cityName">
+        <ng-container matColumnDef="city">
           <th mat-header-cell *matHeaderCellDef > City  </th>
-          <td mat-cell *matCellDef="let row"> {{row.cityName}} </td>
+          <td mat-cell *matCellDef="let row"> {{row.city}} </td>
         </ng-container>
 
 
@@ -150,7 +150,7 @@
         </tr>
       </table>
 
-    </div>
+    </section>
     <br>
     <!---->
     <button type="submit" mat-raised-button color="primary" [disabled]="(projectService.loadingEdit$ | async)">Submit</button>

@@ -56,7 +56,7 @@ export class CreateProjectComponent implements OnInit
       dateFrom: ['', Validators.required],
       dateTo: ['', Validators.required],
       quota: ['', Validators.required],
-      type:['',Validators.required]
+      TypeId :['',Validators.required]
 
     },
     { validators: this.ConfirmedValidator('dateFrom','dateTo') }
@@ -138,10 +138,9 @@ export class CreateProjectComponent implements OnInit
     formData.append('dateFrom', formatDate(this.firstFormGroup.get("dateFrom").value,'yyyy/MM/dd', "en-US"));
     formData.append('dateTo', formatDate(this.firstFormGroup.get("dateTo").value,'yyyy/MM/dd', "en-US"));
     formData.append('quota', this.firstFormGroup.get("quota").value);
-    formData.append('type', this.firstFormGroup.get("type").value);
+    formData.append('TypeId', this.firstFormGroup.get("TypeId").value);
     formData.append('GSMsFile', this.uploadFile);
     formData.append('employeeIDS',this.thirdFormGroup.get("employeeIDS").value.toString());
-    formData.append('CreatedBy', 'MHDISM');
      this.projservice.createProject(formData).subscribe((data)=>{
       this.openSnackBar("Created successfully","Close")
       this.router.navigate(['/projects']);

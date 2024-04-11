@@ -23,7 +23,7 @@ export class DataTableComponent implements OnInit {
   private sortingList = new BehaviorSubject<string>("asc");
   totalItems:number=0;
   projectFilter:FilterModel={searchQuery:"",pageIndex:0,pageSize:10,sortActive:'id',sortDirection:'desc'};
-  displayedColumns: string[] = ['id', 'name', 'dateFrom', 'dateTo','quota','createdBy','typeName'];
+  displayedColumns: string[] = ['id', 'name', 'dateFrom', 'dateTo','quota','createdBy','type'];
   dataSource= new MatTableDataSource<projectListDto>([]);
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;

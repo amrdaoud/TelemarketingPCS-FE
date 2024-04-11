@@ -21,13 +21,15 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { DialogComponent } from '../dialog/dialog.component';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
+import { DatePipe } from '@angular/common';
 
 
 @Component({
   selector: 'app-project-list',
   standalone: true,
   imports: [MatPaginatorModule,CommonModule,RouterOutlet,MatTableModule,MatInputModule,MatFormFieldModule,
-    MatSortModule,MatCardModule,MatButtonModule,MatIconModule,MatProgressBarModule,RouterLink,MatSnackBarModule],
+  MatSortModule,MatCardModule,MatButtonModule,MatIconModule,MatProgressBarModule,RouterLink,MatSnackBarModule],
+    providers:[DatePipe],
   templateUrl: './project-list.component.html',
   styleUrl: './project-list.component.scss'
 })
@@ -38,7 +40,7 @@ export class ProjectListComponent {
   totalItems:number=0;
   projectFilter:FilterModel={searchQuery:"",pageIndex:0,pageSize:5,sortActive:'id',sortDirection:'desc'};
   excelFilter:FilterModel={searchQuery:"",pageIndex:0,pageSize:1000000,sortActive:'id',sortDirection:'desc'};
-  displayedColumns: string[] = ['id', 'name', 'dateFrom', 'dateTo','quota','createdBy','typeName','action'];
+  displayedColumns: string[] = ['id', 'name', 'dateFrom', 'dateTo','quota','createdBy','type','action'];
   dataSource= new MatTableDataSource<projectListDto>([]);
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -51,7 +53,7 @@ export class ProjectListComponent {
   typeData:typeList[];
   constructor( protected projservice:HttpService,private router: Router,
     public dialog: MatDialog,private _snackBar: MatSnackBar,
-     private changeDetectorRefs: ChangeDetectorRef){
+     private changeDetectorRefs: ChangeDetectorRef,private datePipe: DatePipe){
 
   }
 
@@ -113,8 +115,11 @@ exportexcel(): void
       this.excelData= res.data
     })
     this.excelData.forEach((d)=>{
+      d.dateFrom= new Date(this.datePipe.transform(d.dateFrom, 'yyyy-MM-dd'));
+      d.dateTo=new Date(this.datePipe.transform(d.dateTo, 'yyyy-MM-dd'));
+
      let convertData= Object.keys(d).filter(objKey =>
-        (objKey !== 'type'  && objKey !== 'isDeleted' && objKey !== 'projectDetails'))
+        (objKey !== 'typeId'  && objKey !== 'isDeleted' && objKey !== 'projectDetails'))
         .reduce((newObj, key) =>
         {
             newObj[key] = d[key];

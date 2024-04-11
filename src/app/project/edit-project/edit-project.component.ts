@@ -45,8 +45,8 @@ export class EditProjectComponent implements OnInit {
   typeData:typeList[];
   statusData:typeList[];
   isLoad:boolean=false;
-  displayedColumns: string[] = ['gsm','userName','callStatusName','lineTypeName','generationName',
-  'regionName','cityName','segment','subSegment','bundle','contract','alternativeNumber','note'];
+  displayedColumns: string[] = ['gsm','employeeUserName','callStatus','lineType','generation',
+  'region','city','segment','subSegment','bundle','contract','alternativeNumber','note'];
   dataSource= new MatTableDataSource<projectDetails>([]);
   ConvertedData:projectDetails[];
   newDataSource:projectDetails[]=[];
@@ -102,22 +102,22 @@ export class EditProjectComponent implements OnInit {
         gsm:[element.gsm],
         note:[element.note],
         employeeID:[element.employeeID],
-        userName:[element.userName],
-        lineType:[element.lineType],
-        callStatus:[element.callStatus],
-        generation:[element.generation],
-        region:[element.region],
-        city:[element.city],
+        employeeUserName:[element.employeeUserName],
+        lineTypeId:[element.lineTypeId],
+        callStatusId:[element.callStatusId],
+        generationId:[element.generationId],
+        regionId:[element.regionId],
+        cityId:[element.cityId],
         segment:[element.segment],
         subSegment:[element.subSegment],
         bundle:[element.bundle],
         contract:[element.contract],
         alternativeNumber:[element.alternativeNumber],
-        lineTypeName:[element.lineTypeName],
-        callStatusName:[element.callStatusName],
-        generationName:[element.generationName],
-        regionName:[element.regionName],
-        cityName:[element.cityName],
+        lineType:[element.lineType],
+        callStatus:[element.callStatus],
+        generation:[element.generation],
+        region:[element.region],
+        city:[element.city],
 
 
       });
@@ -206,7 +206,7 @@ export class EditProjectComponent implements OnInit {
         dateFrom: [this.empDetails.dateFrom, Validators.required],
         dateTo: [this.empDetails.dateTo, Validators.required],
         quota: [this.empDetails.quota, Validators.required],
-        type: [this.empDetails.type, Validators.required],
+        typeId: [this.empDetails.typeId, Validators.required],
         projectDetails: this._formBuilder.array([])
       },
       { validators: this.ConfirmedValidator('dateFrom','dateTo')

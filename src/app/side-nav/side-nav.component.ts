@@ -11,15 +11,18 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Observable, map } from 'rxjs';
 import { IconNavItemWithRoles } from './side-nav';
 import { TenantAccess } from '../app-core/models/account';
+import {MatBadgeModule} from '@angular/material/badge';
+
 @Component({
   selector: 'app-side-nav',
   standalone: true,
-  imports: [IconSideNavComponent, CommonModule, MatButtonModule, MatIconModule, MatMenuModule, MatProgressSpinnerModule],
+  imports: [IconSideNavComponent, CommonModule, MatButtonModule, MatIconModule,
+     MatMenuModule, MatProgressSpinnerModule,MatBadgeModule],
   templateUrl: './side-nav.component.html',
   styleUrl: './side-nav.component.scss'
 })
 export class SideNavComponent extends Unsubscriber {
-  
+
   private accountService = inject(AccountService);
   authData$ = this.accountService.authData$;
   logging$ = this.accountService.logging$;

@@ -22,6 +22,7 @@ import { DialogComponent } from '../dialog/dialog.component';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import { DatePipe } from '@angular/common';
+import { AccountService } from '../../app-core/services/account.service';
 
 
 @Component({
@@ -51,9 +52,11 @@ export class ProjectListComponent {
   pageIndex:number;
   previousPageIndex:number;
   typeData:typeList[];
+  isAdmin:boolean;
   constructor( protected projservice:HttpService,private router: Router,
     public dialog: MatDialog,private _snackBar: MatSnackBar,
-     private changeDetectorRefs: ChangeDetectorRef,private datePipe: DatePipe){
+     private changeDetectorRefs: ChangeDetectorRef,
+     private datePipe: DatePipe,private accountService:AccountService){
 
   }
 
@@ -62,6 +65,7 @@ export class ProjectListComponent {
     this.getProjects(this.projectFilter);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.IsAdminRole();
   }
   get sortingList$(): Observable<string> {
     return this.sortingList.asObservable();
@@ -163,7 +167,20 @@ exportexcel(): void
     this._snackBar.open(message, action);
   }
 
+  IsAdminRole()
+  {
+     this.accountService.authData$.subscribe((data)=>{
+      if(data.userInfo.tenantAccesses[0].roleList[0]==='Admin')
+        {
+          this.isAdmin=true;
+        }
+        else
+        {
+          this.isAdmin=false;
+        }
+     })
 
+  }
 
 }
 

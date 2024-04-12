@@ -13,6 +13,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAnimations(),
     importProvidersFrom(MatSnackBarModule),
-    provideHttpClient(/*withInterceptors([jwtInterceptor, errorInterceptor])*/),
+    provideHttpClient(withInterceptors([jwtInterceptor, errorInterceptor])),
   ],
 };

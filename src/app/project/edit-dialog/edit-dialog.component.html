@@ -1,6 +1,6 @@
 <mat-dialog-content>
 
-  <mat-form-field style="width: 100%;">
+  <mat-form-field style="width: 100%;" *ngIf="isAdmin">
     <mat-label>Employee</mat-label>
     <mat-select [(ngModel)]="data.details.employeeID">
 

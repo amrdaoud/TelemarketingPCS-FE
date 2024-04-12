@@ -1,16 +1,17 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { DataWithSize, FilterModel } from '../common/generic';
 import { BehaviorSubject, Observable, catchError, finalize, throwError } from 'rxjs';
 import { employeeList, projectDetails, projectDetailsList, projectListDto, typeList } from './project.const';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpService {
-  private url = 'http://telemarketing.somee.com/api/Projects/';
-
-  constructor(private httpClient: HttpClient) { }
+  private url = environment.apiUrl+'Projects/';
+  private httpClient = inject(HttpClient);
+  constructor() { }
 
     //Loaders
     private loadingList = new BehaviorSubject<boolean>(false);

@@ -1,5 +1,5 @@
 export const environment = {
-  apiUrl: 'https://api.tenor.techteec.net/api/',
+  apiUrl: 'https://localhost:44343/api',
   production: true,
   test: false,
   baseHref: '/',

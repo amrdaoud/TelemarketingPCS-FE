@@ -10,34 +10,41 @@ export const routes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'charts'
+        redirectTo: 'home'
       },
       {
         path: 'projects',
         loadComponent: () =>
           import('./project/project-list/project-list.component').then(
             (c) => c.ProjectListComponent
-          )
+          ),canActivate: [authGuard], data: {Roles: ['admin', 'Telemarketer']}
       },
       {
         path: 'create-project',
         loadComponent: () =>
           import('./project/create-project/create-project.component').then(
             (c) => c.CreateProjectComponent
-          )
+          ),canActivate: [authGuard], data: {Roles: ['admin', 'Telemarketer']}
       },
       {
         path: 'edit-project/:id',
         loadComponent: () =>
           import('./project/edit-project/edit-project.component').then(
             (c) => c.EditProjectComponent
-          )
+          ),canActivate: [authGuard], data: {Roles: ['admin', 'Telemarketer']}
       },
       {
         path: 'charts',
         loadComponent: () =>
           import('./project/allcharts/allcharts.component').then(
             (c) => c.AllchartsComponent
+          ),canActivate: [authGuard], data: {Roles: ['admin', 'Researcher']}
+      },
+      {
+        path: 'home',
+        loadComponent: () =>
+          import('./home/home.component').then(
+            (c) => c.HomeComponent
           )
       }
     ],

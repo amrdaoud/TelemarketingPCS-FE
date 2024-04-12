@@ -8,6 +8,8 @@
         </div>
     </div>
     <div toolbar-end class="user-info">
+      <mat-icon style="margin: 20px;" matBadge="15" matBadgeColor="warn">notifications_none</mat-icon>
+
             <img class="avatar-img" *ngIf="!(logging$ | async); else loadingAvatar" [src]="(authData$ | async)?.userInfo?.profileUrl ?? 'assets/avatar.png'" onerror="this.onerror=null; this.src='assets/avatar.png';">
         <div>
             <button [matMenuTriggerFor]="userMenu" mat-icon-button><mat-icon>expand_more</mat-icon></button>

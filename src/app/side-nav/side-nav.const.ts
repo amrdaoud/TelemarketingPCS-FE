@@ -25,19 +25,22 @@ export const items: IconNavItemWithRoles[] = [
     title: 'Project',
     svgIcon: KPI_ICON,
     postition: 'top',
+    roles: ['admin','Telemarketer'],
     children: [
       {
         title: 'Project List',
         svgIcon: LIST_ICON,
         routerLink: 'projects'
-      },
-      {
-        title: 'Statistics',
-        svgIcon: DASHBOARD_ICON,
-        routerLink: 'charts',
       }
+
     ],
   },
+  {
+    title: 'Statistics',
+    svgIcon: DASHBOARD_ICON,
+    roles: ['admin','Researcher'],
+    routerLink: 'charts',
+  }
   // {
   //   title: 'Reports',
   //   svgIcon: REPORT_ICON,

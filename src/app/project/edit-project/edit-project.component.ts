@@ -25,6 +25,7 @@ import { MatPaginator,MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort,MatSortModule } from '@angular/material/sort';
 import {MatIconModule} from '@angular/material/icon';
 import * as XLSX from 'xlsx';
+import { AccountService } from '../../app-core/services/account.service';
 
 @Component({
   selector: 'app-edit-project',
@@ -54,10 +55,11 @@ export class EditProjectComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   convertExcelData:any[]=[];
+  isAdmin:boolean;
 
   constructor(private _formBuilder: FormBuilder,private route: ActivatedRoute,
     protected projectService:HttpService,private _snackBar: MatSnackBar,public dialog: MatDialog,
-    private router: Router)
+    private router: Router,private accountService:AccountService)
     {
 
     }
@@ -73,6 +75,8 @@ export class EditProjectComponent implements OnInit {
     this.getById();
     this.getStataus();
     this.getProjectType();
+    this.IsAdminRole();
+
   }
 
   ConfirmedValidator(controlName: string, matchingControlName: string) {
@@ -202,7 +206,7 @@ export class EditProjectComponent implements OnInit {
       this.dataSource.sort = this.sort;
       this.firstFormGroup = this._formBuilder.group({
         id:[this.empDetails.id,Validators.required],
-        name: [this.empDetails.name, Validators.required],
+        name: [this.empDetails.name,Validators.required],
         dateFrom: [this.empDetails.dateFrom, Validators.required],
         dateTo: [this.empDetails.dateTo, Validators.required],
         quota: [this.empDetails.quota, Validators.required],
@@ -222,8 +226,8 @@ export class EditProjectComponent implements OnInit {
   {
     this.empDetails.projectDetails.forEach((d)=>{
       let convertData= Object.keys(d).filter(objKey =>
-         (objKey !== 'id'  && objKey !== 'lineType' && objKey !== 'callStatus'
-         && objKey !== 'region' && objKey !== 'city' && objKey !== 'employeeID'  && objKey !== 'generation'))
+         (objKey !== 'id'  && objKey !== 'lineTypeId' && objKey !== 'callStatusId'
+         && objKey !== 'regionId' && objKey !== 'cityId' && objKey !== 'employeeID'  && objKey !== 'generationId'))
          .reduce((newObj, key) =>
          {
              newObj[key] = d[key];
@@ -259,6 +263,21 @@ export class EditProjectComponent implements OnInit {
       this.typeData=res;
     })
   }
+  IsAdminRole()
+  {
+     this.accountService.authData$.subscribe((data)=>{
+      if(data.userInfo.tenantAccesses[0].roleList[0]==='Admin')
+        {
+          this.isAdmin=true;
+        }
+        else
+        {
+          this.isAdmin=false;
+        }
+     })
+
+  }
+
 
 }
 

@@ -9,32 +9,33 @@
 
      @if(isLoad)
      {
-      <mat-label>Download distribution</mat-label>
-      <button (click)="exportexcel()" style="margin: 10px;" mat-button color="warn">
+
+      <mat-label *ngIf="isAdmin">Download distribution</mat-label>
+      <button *ngIf="isAdmin" (click)="exportexcel()" style="margin: 10px;" mat-button color="warn">
         <mat-icon>file_download</mat-icon>
       </button>
-      <form [formGroup]="firstFormGroup" (ngSubmit)="onSubmit()">
-      <mat-label>Name</mat-label>
-      <mat-form-field >
-        <input matInput placeholder="Enter your project name" formControlName="name" required>
+      <form [formGroup]="firstFormGroup" (ngSubmit)="onSubmit()" >
+      <mat-label *ngIf="isAdmin">Name</mat-label>
+      <mat-form-field *ngIf="isAdmin" >
+        <input   matInput placeholder="Enter your project name" formControlName="name" required>
       </mat-form-field>
        <br>
-       <mat-label>Quota</mat-label>
-      <mat-form-field>
-        <input type="number" matInput placeholder="Enter quota project" formControlName="quota" required>
+       <mat-label *ngIf="isAdmin">Quota</mat-label>
+      <mat-form-field *ngIf="isAdmin">
+        <input  type="number" matInput placeholder="Enter quota project" formControlName="quota" required>
       </mat-form-field>
       <br>
-      <mat-label>Date From</mat-label>
-      <mat-form-field class="example-full-width">
-        <input matInput  [matDatepicker]="picker" formControlName="dateFrom">
+      <mat-label *ngIf="isAdmin">Date From</mat-label>
+      <mat-form-field class="example-full-width" *ngIf="isAdmin">
+        <input  matInput  [matDatepicker]="picker" formControlName="dateFrom">
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
       <br>
-      <mat-label>Date To</mat-label>
-      <mat-form-field class="example-full-width">
-        <input  matInput  [matDatepicker]="picker2" formControlName="dateTo">
+      <mat-label *ngIf="isAdmin">Date To</mat-label>
+      <mat-form-field class="example-full-width" *ngIf="isAdmin">
+        <input   matInput  [matDatepicker]="picker2" formControlName="dateTo">
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
         <mat-datepicker #picker2></mat-datepicker>
@@ -48,11 +49,11 @@
 
       }
       <br>
-      <mat-label>Type</mat-label>
-      <mat-form-field>
-        <mat-select formControlName="typeId">
+      <mat-label *ngIf="isAdmin">Type</mat-label>
+      <mat-form-field  *ngIf="isAdmin">
+        <mat-select  formControlName="typeId" >
           @for (f of typeData; track f) {
-            <mat-option [value]="f.id">{{f.name}}</mat-option>
+            <mat-option  [value]="f.id">{{f.name}}</mat-option>
           }
         </mat-select>
       </mat-form-field>

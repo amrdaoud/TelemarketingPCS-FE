@@ -11,7 +11,6 @@ import { DataTableComponent } from '../charts/data-table/data-table.component';
 //----------------------------------------------
 import {MatGridListModule} from '@angular/material/grid-list';
 import {NumberCounterComponent} from './../charts/number-counter/number-counter.component';
-import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 
 @Component({
   selector: 'app-allcharts',
@@ -25,25 +24,8 @@ export class AllchartsComponent implements OnInit {
   constructor(){}
 
   ngOnInit(): void {
-    this.hubConnectionBuilder = new HubConnectionBuilder()
-      .withUrl('https://api.excylate.com:81/signalr/general')
-      .configureLogging(LogLevel.Information)
-      .build();
-    this.hubConnectionBuilder
-      .start()
-      .then(() => console.log('Connection started.......!'))
-      .catch(err => console.log('Error while connect with server'));
-    this.hubConnectionBuilder.on('ReceiveNotification', (result: any) => {
-      console.log(result)
-
-      this.offers.push(result);
-       console.log(this.offers)
-    });
-
 
   }
-  private hubConnectionBuilder!: HubConnection;
-  offers: any[] = [];
 
   private breakpointObserver = inject(BreakpointObserver);
 

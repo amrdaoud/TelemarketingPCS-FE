@@ -23,6 +23,7 @@ import { BehaviorSubject, Observable, map } from 'rxjs';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import { DatePipe } from '@angular/common';
 import { AccountService } from '../../app-core/services/account.service';
+import { NotificationService } from '../notification.service';
 
 
 @Component({
@@ -56,7 +57,9 @@ export class ProjectListComponent {
   constructor( protected projservice:HttpService,private router: Router,
     public dialog: MatDialog,private _snackBar: MatSnackBar,
      private changeDetectorRefs: ChangeDetectorRef,
-     private datePipe: DatePipe,private accountService:AccountService){
+     private datePipe: DatePipe,private accountService:AccountService,
+     protected notificationService:NotificationService
+    ){
 
   }
 

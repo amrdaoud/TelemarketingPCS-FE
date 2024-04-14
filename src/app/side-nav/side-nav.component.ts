@@ -12,17 +12,18 @@ import { Observable, map } from 'rxjs';
 import { IconNavItemWithRoles } from './side-nav';
 import { TenantAccess } from '../app-core/models/account';
 import {MatBadgeModule} from '@angular/material/badge';
-
+import { NotificationService } from '../project/notification.service';
+import { ToasterContainerComponent } from '../project/Toaster/ToasterContainerComponent';
 @Component({
   selector: 'app-side-nav',
   standalone: true,
   imports: [IconSideNavComponent, CommonModule, MatButtonModule, MatIconModule,
-     MatMenuModule, MatProgressSpinnerModule,MatBadgeModule],
+     MatMenuModule, MatProgressSpinnerModule,MatBadgeModule,ToasterContainerComponent],
   templateUrl: './side-nav.component.html',
   styleUrl: './side-nav.component.scss'
 })
 export class SideNavComponent extends Unsubscriber {
-
+  protected notificationService = inject(NotificationService);
   private accountService = inject(AccountService);
   authData$ = this.accountService.authData$;
   logging$ = this.accountService.logging$;
@@ -51,4 +52,7 @@ export class SideNavComponent extends Unsubscriber {
       }
     })
   }
+
+
+
 }

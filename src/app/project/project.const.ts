@@ -49,3 +49,11 @@ export interface projectDetailsList extends projectListDto
 {
   projectDetails:projectDetails[];
 }
+
+export class NotificationDto
+{
+  projectId: number;
+  projectName: string;
+  message: string;
+}
+

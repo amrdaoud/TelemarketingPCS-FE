@@ -1,3 +1,5 @@
+
+
 <amr-icon-side-nav [items]="(authItems$ | async)!" toolbarMode="auto-hide" brand="Telemarketing" logoSrc="assets/logo.png">
     <div toolbar-start class="title-container">
         <div class="title">
@@ -8,9 +10,31 @@
         </div>
     </div>
     <div toolbar-end class="user-info">
-      <mat-icon style="margin: 20px;" matBadge="15" matBadgeColor="warn">notifications_none</mat-icon>
+      <app-toaster-container></app-toaster-container>
+
+
+      <button  style="margin: 10px;" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+        <mat-icon  matBadge="{{(notificationService.pushedNotification$ | async).length }}" matBadgeColor="warn">notifications_none</mat-icon>
+      </button>
+        <mat-menu #menu="matMenu" >
+          <div mat-menu-item disabled>
+            <mat-icon>view_list</mat-icon>
+            <span style="color: blue;">Notification Alert</span>
+          </div>
+          <div>
+            <h5 >Recently</h5>
+          </div>
+          @for (item of (notificationService.pushedNotification$ | async) ; track $index)
+          {
+            <button mat-menu-item >
+              <mat-icon>fiber_new</mat-icon>
+           <h5>{{item.message}}</h5>
+            </button>
+          }
+        </mat-menu>
 
             <img class="avatar-img" *ngIf="!(logging$ | async); else loadingAvatar" [src]="(authData$ | async)?.userInfo?.profileUrl ?? 'assets/avatar.png'" onerror="this.onerror=null; this.src='assets/avatar.png';">
+
         <div>
             <button [matMenuTriggerFor]="userMenu" mat-icon-button><mat-icon>expand_more</mat-icon></button>
             <mat-menu #userMenu="matMenu">
@@ -23,10 +47,14 @@
             </mat-menu>
         </div>
     </div>
+
 </amr-icon-side-nav>
 <ng-template #loadingAvatar>
     <div class="avatar-spinner-container">
         <img src='assets/avatar.png' alt='background'/>
         <mat-spinner class="avatar-spinner" diameter="45" color="accent" ></mat-spinner>
     </div>
+
 </ng-template>
+
+

@@ -21,6 +21,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { Observable, map, startWith } from 'rxjs';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { NotificationService } from '../notification.service';
 
 @Component({
   selector: 'app-create-project',
@@ -68,10 +69,13 @@ export class CreateProjectComponent implements OnInit
       employeeIDS: ['', Validators.required],
     });
 
+
   }
   ngOnInit(): void {
     this.getEmployeeList();
     this.getProjectType();
+
+
   }
 
 
@@ -105,7 +109,6 @@ export class CreateProjectComponent implements OnInit
             const sheetname= workbook.SheetNames[0];
             const sheet1 = workbook.Sheets[sheetname]
             this.excelData=xls.utils.sheet_to_json(sheet1,{raw:true});
-            console.log(this.excelData)
             //-------------------Get Header----------------------
              // extract header from excel
         const headers: string[] = [];
@@ -177,7 +180,6 @@ export class CreateProjectComponent implements OnInit
   uploadExcelValidation(data:any):boolean
   {
 
-    console.log(data)
     if( data.includes('GSM') && data.includes('LineType') && data.includes('CallStatus')
        && data.includes('Generation') && data.includes('Region') && data.includes('City')
        && data.includes('Segment') && data.includes('SubSegment') && data.includes('Bundle')

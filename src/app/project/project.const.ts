@@ -57,3 +57,16 @@ export class NotificationDto
   message: string;
 }
 
+export interface NotificationListViewModel
+{
+  id:number;
+  projectId:number;
+  projectName:string;
+  title:string;
+  message:string;
+  type:string;
+  createdDate:Date;
+  isRead:boolean;
+ duration:string;
+
+}

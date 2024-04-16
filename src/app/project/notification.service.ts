@@ -1,19 +1,29 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import * as signalR from "@microsoft/signalr"
-import { NotificationDto } from './project.const';
-import { BehaviorSubject, Observable, empty } from 'rxjs';
+import { NotificationDto, NotificationListViewModel } from './project.const';
+import { BehaviorSubject, Observable, delay, empty, finalize } from 'rxjs';
 import { ToasterService } from './Toaster/ToasterService';
+import { environment } from '../../environments/environment';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { ThemeService } from 'ng2-charts';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService  {
-
-  constructor(private toaster: ToasterService){}
+  private url = environment.apiUrl+'Notification/';
+  private httpClient = inject(HttpClient);
   private hubConnection: signalR.HubConnection;
-  notList:NotificationDto[]=[];
+  notList:NotificationListViewModel[]=[];
+  connId:string;
+  notificationLength = new BehaviorSubject<number>(0);
+  get notificationLength$(): Observable<number> {
+    return this.notificationLength.asObservable();
+  }
+  constructor(private toaster: ToasterService){}
 
-  private pushedNotification = new  BehaviorSubject<NotificationDto[]>([]);
+  public pushedNotification = new  BehaviorSubject<NotificationListViewModel[]>([]);
+
    get pushedNotification$(): Observable<NotificationDto[]> {
     return this.pushedNotification.asObservable();
   }
@@ -28,16 +38,18 @@ export class NotificationService  {
     this.hubConnection
       .start()
       .then(() => console.log('Connection started'))
+      .then(()=>this.getUserConnectionId())
       .catch(err => console.log('Error while starting connection: ' + err))
+
   }
 
 
   public addProjectListner = () => {
-    this.hubConnection.on('SendMessage', (notification: NotificationDto) => {
-      this.notList=this.pushedNotification.value;
+    this.hubConnection.on('SendMessage', (notification: NotificationListViewModel) => {
       this.notList.push(notification)
       this.pushedNotification.next(this.notList);
-      this.showSuccessToaster(notification.projectName)
+      this.notificationLength.next(this.notificationLength.value+1)
+      this.showSuccessToaster(notification.message)
     });
 
 
@@ -54,7 +66,7 @@ export class NotificationService  {
 
 
   showSuccessToaster(msg:string) {
-    this.toaster.show('success', 'New Project', msg);
+    this.toaster.show('success', 'New Project', msg,4000);
   }
   showErrorToaster() {
     this.toaster.show('error', 'Check it out!', 'This is a error alert');
@@ -63,7 +75,29 @@ export class NotificationService  {
     this.toaster.show('warning', 'Check it out!', 'This is a warning alert', 3000);
   }
 
+  getUserConnectionId()
+  {
+    this.hubConnection.invoke('GetConnectionId').then((connectionId)=> {
+      this.UpdateConnectionHub(connectionId).subscribe((res)=>{})
 
+    })
+  }
 
+  UpdateConnectionHub(conId:string):Observable<any>
+  {
+  return this.httpClient.get<any>(this.url+'UpdateHubClient?connectionId='+conId);
+
+  }
+
+  ReadNotification(id:number):Observable<any>
+  {
+    return this.httpClient.get<any>(this.url+'ReadNotification?id='+id);
+  }
+
+  GetUserNotifications():Observable<{ data: NotificationListViewModel[]; dataSize: number }>
+  {
+    return this.httpClient.get<{ data: NotificationListViewModel[]; dataSize: number }>(this.url+'GetUserNotification');
+
+  }
 
 }

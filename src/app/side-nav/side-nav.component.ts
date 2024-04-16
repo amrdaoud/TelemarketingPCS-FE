@@ -8,25 +8,33 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { Unsubscriber } from 'techteec-lib/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
 import { IconNavItemWithRoles } from './side-nav';
 import { TenantAccess } from '../app-core/models/account';
 import {MatBadgeModule} from '@angular/material/badge';
 import { NotificationService } from '../project/notification.service';
 import { ToasterContainerComponent } from '../project/Toaster/ToasterContainerComponent';
+import { NotificationListViewModel } from '../project/project.const';
+import { Router, RouterModule, Routes } from '@angular/router';
+
 @Component({
   selector: 'app-side-nav',
   standalone: true,
   imports: [IconSideNavComponent, CommonModule, MatButtonModule, MatIconModule,
-     MatMenuModule, MatProgressSpinnerModule,MatBadgeModule,ToasterContainerComponent],
+     MatMenuModule, MatProgressSpinnerModule,MatBadgeModule,ToasterContainerComponent,RouterModule],
   templateUrl: './side-nav.component.html',
   styleUrl: './side-nav.component.scss'
 })
 export class SideNavComponent extends Unsubscriber {
   protected notificationService = inject(NotificationService);
   private accountService = inject(AccountService);
+  private router = inject(Router);
+
+  notificationsData:NotificationListViewModel[]=[];
   authData$ = this.accountService.authData$;
   logging$ = this.accountService.logging$;
+
+
   login() {
     this._otherSubscription = this.accountService.login().subscribe();
   }
@@ -53,6 +61,41 @@ export class SideNavComponent extends Unsubscriber {
     })
   }
 
+  readNotification(input:NotificationListViewModel)
+  {
+    this.notificationService.ReadNotification(input.id).subscribe((res)=>{
+      if(res)
+        {
+          this.getNotification();
+          this.notificationService.notificationLength.next(this.notificationService.notificationLength.value-1)
+           if(this.router.url.includes('edit-project'))
+            {
+              this.router.navigate(['/edit-project/'+input.projectId])
+              .then(()=> window.location.reload());
 
 
+
+            }
+            else{
+              this.router.navigateByUrl('/edit-project/'+input.projectId);
+
+            }
+
+
+        }
+    })
+  }
+
+  getNotification()
+  {
+    this.notificationService.GetUserNotifications().subscribe((res)=>{
+      this.notificationsData=res.data
+      this.notificationService.notificationLength.next(this.notificationsData.length)
+    })
+  }
+
+  ngOnInit(): void {
+   this.getNotification();
+
+  }
 }

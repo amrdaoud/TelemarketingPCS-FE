@@ -24,6 +24,7 @@ import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import { DatePipe } from '@angular/common';
 import { AccountService } from '../../app-core/services/account.service';
 import { NotificationService } from '../notification.service';
+import { DistributeDialoComponent } from '../distribute-dialo/distribute-dialo.component';
 
 
 @Component({
@@ -184,6 +185,19 @@ exportexcel(): void
      })
 
   }
+
+  openDistributeDialog(project:any,enterAnimationDuration: string, exitAnimationDuration: string): void {
+    this.dialog.open(DistributeDialoComponent, {data:project,
+      width: '500px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+    })
+
+  }
+
+
+
+
 
 }
 

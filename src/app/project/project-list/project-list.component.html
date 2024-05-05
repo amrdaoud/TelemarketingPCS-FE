@@ -23,6 +23,7 @@
 
     <div class="mat-elevation-z8">
       <mat-progress-bar mode="indeterminate" *ngIf="(projservice.loadingList$ | async)"></mat-progress-bar>
+      <mat-progress-bar mode="indeterminate" *ngIf="(projservice.redistributedList$| async)"></mat-progress-bar>
 
       <table id="excel-table" mat-table [dataSource]="dataSource" matSort>
 
@@ -79,6 +80,14 @@
                 <mat-icon>delete_forever </mat-icon>
 
               </button>
+
+              <button mat-button color="Basic" (click)="openDistributeDialog(row,'0ms', '0ms')" *ngIf="isAdmin">
+                <mat-icon>update</mat-icon>
+
+              </button>
+
+
+
             </div>
 
 

@@ -34,6 +34,12 @@ export class HttpService {
       return this.loadingEdit.asObservable();
     }
 
+    private redistributedList = new BehaviorSubject<boolean>(false);
+    get redistributedList$(): Observable<boolean> {
+      return this.redistributedList.asObservable();
+    }
+
+
     getProjects(filterM:FilterModel):Observable<{ data: projectListDto[]; dataSize: number }>
   {
     this.loadingList.next(true);
@@ -107,6 +113,18 @@ export class HttpService {
   getGeneration():Observable<typeList[]>
   {
     return this.httpClient.get<typeList[]>(this.url+"getLineGenerations")
+  }
+
+  redistributeProject(projectId:number , EmployeeIds:string):Observable<any>
+  {
+    this.redistributedList.next(true);
+    return this.httpClient.get(this.url+"reDistributeProjectGSMs?projectId="+projectId+"&EmployeeIds="+EmployeeIds)
+    .pipe(finalize(() => this.redistributedList.next(false)));
+  }
+
+  updateProjectDetail(projectDetail:projectDetails):Observable<any>
+  {
+    return this.httpClient.put(this.url+"updateProjectDetail",projectDetail)
   }
 
 }

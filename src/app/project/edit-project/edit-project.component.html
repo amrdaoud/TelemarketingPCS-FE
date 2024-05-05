@@ -1,5 +1,6 @@
 <mat-card style="margin: 5px;">
   <mat-progress-bar mode="indeterminate" *ngIf="(projectService.loadingDetails$| async)"></mat-progress-bar>
+  <mat-progress-bar mode="indeterminate" *ngIf="(projectService.loadingEdit$| async)"></mat-progress-bar>
 
   <mat-card-header>
     <mat-card-title>Project Details</mat-card-title>
@@ -58,7 +59,9 @@
         </mat-select>
       </mat-form-field>
 
-
+      <button *ngIf="isAdmin" style="margin: 5px;" type="submit" mat-raised-button color="primary" [disabled]="(projectService.loadingEdit$ | async)">Submit</button>
+    </form>
+  <br><br>
     <!--data table-->
     <mat-label>Filter</mat-label>
     <mat-form-field>
@@ -154,8 +157,7 @@
     </section>
     <br>
     <!---->
-    <button type="submit" mat-raised-button color="primary" [disabled]="(projectService.loadingEdit$ | async)">Submit</button>
-  </form>
+
 
   }
   <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>

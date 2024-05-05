@@ -45,8 +45,10 @@ export class EditDialogComponent  implements OnInit{
     this.data.details.employeeUserName=this.data.employeelis.filter(x=>x.id===this.data.details.employeeID)[0].userName;
     this.data.details.callStatusId=this.data.status.filter(x=>x.id===this.data.details.callStatusId)[0].id;
     this.data.details.callStatus=this.data.status.filter(x=>x.id===this.data.details.callStatusId)[0].name;
-
-    this.dialogRef.close(this.data);
+     this.projectService.updateProjectDetail(this.data.details).subscribe((res)=>{
+      console.log(res.data)
+     })
+    //this.dialogRef.close(this.data);
   }
 
   IsAdminRole()

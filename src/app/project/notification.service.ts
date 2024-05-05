@@ -49,7 +49,7 @@ export class NotificationService  {
       this.notList.push(notification)
       this.pushedNotification.next(this.notList);
       this.notificationLength.next(this.notificationLength.value+1)
-      this.showSuccessToaster(notification.message)
+      this.showSuccessToaster(notification.message,notification.title)
     });
 
 
@@ -65,8 +65,8 @@ export class NotificationService  {
   }
 
 
-  showSuccessToaster(msg:string) {
-    this.toaster.show('success', 'New Project', msg,4000);
+  showSuccessToaster(msg:string , title:string) {
+    this.toaster.show('success', title, msg,4000);
   }
   showErrorToaster() {
     this.toaster.show('error', 'Check it out!', 'This is a error alert');

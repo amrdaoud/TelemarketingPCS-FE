@@ -14,21 +14,16 @@
       <button (click)="getNotification()" style="margin: 10px;" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
         <mat-icon  matBadge="{{(notificationService.notificationLength$ | async)}}" matBadgeColor="warn">notifications_none</mat-icon>
       </button>
-        <mat-menu #menu="matMenu" >
+        <mat-menu #menu="matMenu" xPosition="before">
           <div mat-menu-item disabled>
-            <mat-icon>view_list</mat-icon>
-            <span style="color: blue;">Notification Alert</span>
+            <span style="color: blue;">Notifications</span>
           </div>
-          <div mat-menu-item>
-            <mat-icon>fiber_new</mat-icon>
 
-            <h5 >Recently</h5>
-          </div>
 
             @for (item of notificationsData ; track $index)
           {
             <button (click)="readNotification(item)" mat-menu-item >
-           <h6>{{item.message}} from {{item.duration}} hours</h6>
+           <h5>{{item.message}}-{{item.duration}} ago</h5>
 
             </button>
           }

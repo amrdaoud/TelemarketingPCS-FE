@@ -55,7 +55,7 @@ export class AllchartsComponent implements OnInit {
       label: "Customers served ",
       number: "2000",
       duration: "0.4",
-      cardTitle:"Served"
+      cardTitle:"Project"
 
     },
     {

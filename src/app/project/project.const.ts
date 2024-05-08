@@ -67,6 +67,6 @@ export interface NotificationListViewModel
   type:string;
   createdDate:Date;
   isRead:boolean;
- duration:string;
-
+  duration:string;
+  img:string;
 }

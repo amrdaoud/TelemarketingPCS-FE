@@ -23,9 +23,13 @@
             @for (item of notificationsData ; track $index)
           {
             <button (click)="readNotification(item)" mat-menu-item >
-           <h5>{{item.message}}-{{item.duration}} ago</h5>
+              <div style="display: flex;align-items: center;justify-content: center;">
+                <img class="avatar-img"  [src]="item.img ?? 'assets/avatar.png'" onerror="this.onerror=null; this.src='assets/avatar.png';">
+                <h5 style="padding: 2px;">{{item.message}}-{{item.duration}} ago</h5>
+              </div>
 
             </button>
+
           }
 
 

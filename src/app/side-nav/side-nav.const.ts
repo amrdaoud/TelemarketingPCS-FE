@@ -15,12 +15,12 @@ import {
 } from '../common/app-icons.const';
 import { IconNavItemWithRoles } from './side-nav';
 export const items: IconNavItemWithRoles[] = [
-  // {
-  //   title: 'Home',
-  //   svgIcon: HOME_ICON,
-  //   postition: 'top',
-  //   routerLink: 'home'
-  // },
+  {
+    title: 'Home',
+    svgIcon: HOME_ICON,
+    postition: 'top',
+    routerLink: 'home'
+  },
   {
     title: 'Project',
     svgIcon: KPI_ICON,

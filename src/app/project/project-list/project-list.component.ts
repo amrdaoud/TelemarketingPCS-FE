@@ -25,6 +25,7 @@ import { DatePipe } from '@angular/common';
 import { AccountService } from '../../app-core/services/account.service';
 import { NotificationService } from '../notification.service';
 import { DistributeDialoComponent } from '../distribute-dialo/distribute-dialo.component';
+import { FilterDialogComponent } from '../filter-dialog/filter-dialog.component';
 
 
 @Component({
@@ -41,8 +42,8 @@ export class ProjectListComponent {
   private sortingList = new BehaviorSubject<string>("asc");
   fileName= 'Projects.xlsx';
   totalItems:number=0;
-  projectFilter:FilterModel={searchQuery:"",pageIndex:0,pageSize:5,sortActive:'id',sortDirection:'desc'};
-  excelFilter:FilterModel={searchQuery:"",pageIndex:0,pageSize:1000000,sortActive:'id',sortDirection:'desc'};
+  projectFilter:FilterModel={searchQuery:"",pageIndex:0,pageSize:5,sortActive:'id',sortDirection:'desc',dateFrom:null,dateTo:null,createdBy:null,typeIds:null};
+  excelFilter:FilterModel={searchQuery:"",pageIndex:0,pageSize:1000000,sortActive:'id',sortDirection:'desc',dateFrom:null,dateTo:null,createdBy:null,typeIds:null};
   displayedColumns: string[] = ['id', 'name', 'dateFrom', 'dateTo','quota','createdBy','type','action'];
   dataSource= new MatTableDataSource<projectListDto>([]);
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -55,6 +56,7 @@ export class ProjectListComponent {
   previousPageIndex:number;
   typeData:typeList[];
   isAdmin:boolean;
+  advanceFilter:any;
   constructor( protected projservice:HttpService,private router: Router,
     public dialog: MatDialog,private _snackBar: MatSnackBar,
      private changeDetectorRefs: ChangeDetectorRef,
@@ -75,8 +77,10 @@ export class ProjectListComponent {
     return this.sortingList.asObservable();
   }
 
-  getProjects(filter:FilterModel){
-
+  getProjects(filter:FilterModel)
+  {
+    this.dataSource= new MatTableDataSource<projectListDto>([]);
+    this.projectFilter=filter;
        this.projservice.getProjects(filter)
       .subscribe((response: { data: projectListDto[]; dataSize: number }) => {
         this.dataSource.data= response.data;
@@ -91,6 +95,11 @@ handlePageEvent(event: PageEvent){
   this.pageIndex = event.pageIndex;
   this.projectFilter.pageIndex = event.pageIndex;
   this.projectFilter.pageSize=event.pageSize;
+  this.projectFilter.dateFrom = this.advanceFilter.dateFrom;
+  this.projectFilter.dateTo = this.advanceFilter.dateTo;
+  this.projectFilter.createdBy = this.advanceFilter.createdBy;
+  this.projectFilter.typeIds = this.advanceFilter.typeIds;
+
    this.getProjects(this.projectFilter)
 }
 
@@ -99,7 +108,10 @@ applyFilter(event: Event) {
   const filterValue = (event.target as HTMLInputElement).value;
   //this.dataSource.filter = filterValue.trim().toLowerCase();
   this.projectFilter.searchQuery=filterValue.trim().toLowerCase();
-
+  this.projectFilter.dateFrom = this.advanceFilter.dateFrom;
+  this.projectFilter.dateTo = this.advanceFilter.dateTo;
+  this.projectFilter.createdBy = this.advanceFilter.createdBy;
+  this.projectFilter.typeIds = this.advanceFilter.typeIds;
   this.getProjects(this.projectFilter);
   if (this.dataSource.paginator) {
     this.dataSource.paginator.firstPage();
@@ -195,7 +207,24 @@ exportexcel(): void
 
   }
 
+  openFilterDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
+    const dialogRef = this.dialog.open(FilterDialogComponent, {data:this.projectFilter,
+      width: '300px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      this.advanceFilter=result.filter;
+      this.dataSource=result.data;
+      this.totalItems = result.counter;
+      this.projectFilter.dateFrom = result.filter.dateFrom;
+      this.projectFilter.dateTo = result.filter.dateTo;
+      this.projectFilter.createdBy = result.filter.createdBy;
+      this.projectFilter.typeIds = result.filter.typeIds;
+    })
+
+  }
 
 
 

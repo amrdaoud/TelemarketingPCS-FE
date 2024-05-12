@@ -22,7 +22,7 @@ import {MatInputModule} from '@angular/material/input';
 export class DataTableComponent implements OnInit {
   private sortingList = new BehaviorSubject<string>("asc");
   totalItems:number=0;
-  projectFilter:FilterModel={searchQuery:"",pageIndex:0,pageSize:10,sortActive:'id',sortDirection:'desc'};
+  projectFilter:FilterModel={searchQuery:"",pageIndex:0,pageSize:10,sortActive:'id',sortDirection:'desc',dateFrom:null,dateTo:null,createdBy:null,typeIds:null};
   displayedColumns: string[] = ['id', 'name', 'dateFrom', 'dateTo','quota','createdBy','type'];
   dataSource= new MatTableDataSource<projectListDto>([]);
   @ViewChild(MatPaginator) paginator: MatPaginator;

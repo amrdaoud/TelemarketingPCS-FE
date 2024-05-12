@@ -20,5 +20,8 @@ export class FilterModel
   pageSize:number;
   sortActive:string;
   sortDirection:string;
-
+  dateFrom :Date;
+  dateTo : Date;
+  createdBy : string[];
+  typeIds : number[];
 }

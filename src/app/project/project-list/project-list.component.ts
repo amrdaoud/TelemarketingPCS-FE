@@ -108,10 +108,10 @@ applyFilter(event: Event) {
   const filterValue = (event.target as HTMLInputElement).value;
   //this.dataSource.filter = filterValue.trim().toLowerCase();
   this.projectFilter.searchQuery=filterValue.trim().toLowerCase();
-  this.projectFilter.dateFrom = this.advanceFilter.dateFrom;
-  this.projectFilter.dateTo = this.advanceFilter.dateTo;
-  this.projectFilter.createdBy = this.advanceFilter.createdBy;
-  this.projectFilter.typeIds = this.advanceFilter.typeIds;
+  this.projectFilter.dateFrom = this.advanceFilter!=null? this.advanceFilter.dateFrom:null;
+  this.projectFilter.dateTo = this.advanceFilter!=null? this.advanceFilter.dateTo:null;
+  this.projectFilter.createdBy = this.advanceFilter!=null? this.advanceFilter.createdBy:null;
+  this.projectFilter.typeIds = this.advanceFilter!=null? this.advanceFilter.typeIds:null;
   this.getProjects(this.projectFilter);
   if (this.dataSource.paginator) {
     this.dataSource.paginator.firstPage();

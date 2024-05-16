@@ -55,6 +55,13 @@ export const routes: Routes = [
           import('./app-core/redirects/not-eligible/not-eligible.component').then(
             (c) => c.NotEligibleComponent
           )
+  },
+  {
+    path: '**',
+        loadComponent: () =>
+          import('./project/notfound/notfound.component').then(
+            (c) => c.NotfoundComponent
+          )
   }
 
 ];

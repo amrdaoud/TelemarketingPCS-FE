@@ -11,6 +11,13 @@
     border-radius: 50%;
     border: $accent-lighter 2px solid;
 }
+
+.avatar-not-img {
+  width:30px;
+  height:30px;
+  border-radius: 50%;
+  border: $accent-lighter 2px solid;
+}
 .menu-btn-center {
     text-align: center;
     padding: 10px 10px 0px 10px;
@@ -47,4 +54,6 @@
         border-radius: 50%;
         border: $accent-lighter 2px solid;
     }
+
+
 }

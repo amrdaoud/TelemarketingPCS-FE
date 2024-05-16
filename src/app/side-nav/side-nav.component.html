@@ -14,7 +14,7 @@
       <button (click)="getNotification()" style="margin: 10px;" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
         <mat-icon  matBadge="{{(notificationService.notificationLength$ | async)}}" matBadgeColor="warn">notifications_none</mat-icon>
       </button>
-        <mat-menu #menu="matMenu" xPosition="before">
+        <mat-menu  #menu="matMenu" xPosition="before">
           <div mat-menu-item disabled>
             <span style="color: blue;">Notifications</span>
           </div>
@@ -24,8 +24,8 @@
           {
             <button (click)="readNotification(item)" mat-menu-item >
               <div style="display: flex;align-items: center;justify-content: center;">
-                <img class="avatar-img"  [src]="item.img ?? 'assets/avatar.png'" onerror="this.onerror=null; this.src='assets/avatar.png';">
-                <h5 style="padding: 2px;">{{item.message}}-{{item.duration}} ago</h5>
+                <img class="avatar-not-img"  [src]="item.img ?? 'assets/avatar.png'" onerror="this.onerror=null; this.src='assets/avatar.png';">
+                <h6 style="padding: 2px;">{{item.message}}-{{item.duration}} ago</h6>
               </div>
 
             </button>

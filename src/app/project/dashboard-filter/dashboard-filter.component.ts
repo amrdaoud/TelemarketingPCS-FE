@@ -67,7 +67,7 @@ export class DashboardFilterComponent implements OnInit {
     let pid=this.projects.filter(x=>x.name===this.myControl.value)[0].id;
      this.filterForm.get('projectId').setValue(pid);
     this.projectService.getStatistics(this.filterForm.value).subscribe((res)=>{
-     this.data=res
+     this.data = {card:res , filter:this.filterForm.value}
      this._bottomSheetRef.dismiss(this.data);
 
     })

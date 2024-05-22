@@ -1,23 +1,30 @@
+<mat-progress-bar mode="indeterminate" *ngIf="(projectService.dashboardLoading$ | async)"></mat-progress-bar>
 
+@if (projectDetails!=null && projectDetails.gsmStatusStatistics.length!=0)
+{
 
-  <mat-grid-list cols="{{ ( cardLayout | async )?.columns }}" rowHeight="200px">
+<mat-card style="margin: 5px;">
+  <mat-card-header>
+    <mat-card-title>{{projectDetails.projectName}}</mat-card-title>
+    <mat-card-subtitle>{{projectDetails.createdBy}} - {{projectDetails.dateFrom | date}}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-grid-list cols="{{ ( cardLayout | async )?.columns }}" rowHeight="200px">
 
-
-     @if (projectDetails!=null)
-     {
-      <mat-grid-tile  *ngFor="let i of projectDetails.gSMStatusStatistics" [colspan]="( cardLayout | async )?.miniCard.cols"
+      <mat-grid-tile  *ngFor="let i of projectDetails.gsmStatusStatistics" [colspan]="( cardLayout | async )?.miniCard.cols"
       [rowspan]="( cardLayout | async )?.miniCard.rows">
       <app-card title={{i.status}}  bgColor="#E8F0F4" titleColor="#972ED1"><div>
         <app-number-counter
-        [number]="i.GSMCount.toString()+'//'+projectDetails.totalGSMCount"
+        [number]="i.gsmCount.toString()"
         [label]="'Rate'"
         [duration]="'0.4'"
+        [total]="projectDetails.totalGSMCount.toString()"
       >
     </app-number-counter>
       </div>
     </app-card>
     </mat-grid-tile>
-     }
+
 
     <!--Charts-->
 
@@ -47,8 +54,21 @@
     <!--Table-->
 
   </mat-grid-list>
+  </mat-card-content>
+
+  <mat-card-actions>
+  </mat-card-actions>
+
+</mat-card>
 
 
+}
+@else if(projectDetails!=null && projectDetails.gsmStatusStatistics.length==0) {
+
+  <div style="text-align: center;">
+  <h3 style="color: red;">No data found</h3>
+  </div>
+}
     <!-- <mat-card style="margin: 5px; overflow:auto;display: flex;">
       <app-data-table></app-data-table>
     </mat-card> -->

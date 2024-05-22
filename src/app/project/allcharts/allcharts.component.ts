@@ -20,13 +20,15 @@ import { DashboardFilterComponent } from '../dashboard-filter/dashboard-filter.c
 import {MatIconModule} from '@angular/material/icon';
 import { HttpService } from '../http.service';
 import { StatisticsReportViewModel, statusCard } from '../project.const';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 @Component({
   selector: 'app-allcharts',
   standalone: true,
   imports: [MatGridListModule,CommonModule,CardComponent,BarComponent,LineComponent,
     PieComponent,RadarComponent,DataTableComponent,NumberCounterComponent,
-    MatTableModule,MatCardModule,MatBottomSheetModule,MatButtonModule, MatBottomSheetModule,MatIconModule],
+    MatTableModule,MatCardModule,MatBottomSheetModule,MatButtonModule,
+     MatBottomSheetModule,MatIconModule,MatProgressBarModule],
   templateUrl: './allcharts.component.html',
   styleUrl: './allcharts.component.scss'
 })
@@ -34,9 +36,7 @@ export class AllchartsComponent implements OnInit {
   constructor(private _bottomSheet: MatBottomSheet ,protected  projectService:HttpService) {}
 
   projectDetails:StatisticsReportViewModel;
-  fake:statusCard[]=[{status:'open',GSMCount:10},{status:'open',GSMCount:10},{status:'open',GSMCount:10},{status:'open',GSMCount:10},{status:'open',GSMCount:10}]
   ngOnInit(): void {
-
   }
 
   private breakpointObserver = inject(BreakpointObserver);
@@ -97,12 +97,9 @@ export class AllchartsComponent implements OnInit {
   openBottomSheet(): void {
    const bottom= this._bottomSheet.open(DashboardFilterComponent);
    bottom.afterDismissed().subscribe(result => {
-    this.projectDetails=result;
+    this.projectDetails = result != null ? result.card :this.projectDetails;
 
    })
-
-
-
 
   }
 

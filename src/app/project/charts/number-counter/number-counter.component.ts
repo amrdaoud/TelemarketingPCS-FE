@@ -14,6 +14,8 @@ export class NumberCounterComponent implements OnInit, OnChanges, AfterViewInit
   @Input("number") number!: string;
   @Input("label") label!: string;
   @Input("duration") duration!: string;
+  @Input("total") total!: string;
+
   counter = new BehaviorSubject<string>("0");
   constructor() {}
   ngOnInit(): void {

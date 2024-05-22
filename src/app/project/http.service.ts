@@ -42,7 +42,10 @@ export class HttpService {
       return this.redistributedList.asObservable();
     }
 
-
+    private dashboardLoading = new BehaviorSubject<boolean>(false);
+    get dashboardLoading$(): Observable<boolean> {
+      return this.dashboardLoading.asObservable();
+    }
 
     getProjects(filterM:FilterModel):Observable<{ data: projectListDto[]; dataSize: number }>
   {
@@ -134,10 +137,12 @@ export class HttpService {
 
   getStatistics(input:DashboardFilter):Observable<StatisticsReportViewModel>
   {
+    this.dashboardLoading.next(true);
+
      return this.httpClient.get<StatisticsReportViewModel>(this.dashboardUrl+
       "getProjectStatistics?projectId="+input.projectId+"&dateFrom="
-      +formatDate(input.dateFrom,'yyyy-MM-dd', "en-US")+"&dateTo="+formatDate(input.dateTo,'yyyy-MM-dd', "en-US")
-     )
+      +formatDate(input.dateFrom,'yyyy-MM-dd', "en-US")+"&dateTo="+formatDate(input.dateTo,'yyyy-MM-dd', "en-US"))
+      .pipe(finalize(() => this.dashboardLoading.next(false)));
   }
 
 }

@@ -86,11 +86,11 @@ export interface StatisticsReportViewModel
   quota : number;
   dateFrom : Date;
   dateTo : Date;
-  gSMStatusStatistics : statusCard[];
+  gsmStatusStatistics : statusCard[];
 }
 
 export class statusCard
 {
   status : string
-  GSMCount : number;
+  gsmCount : number;
 }

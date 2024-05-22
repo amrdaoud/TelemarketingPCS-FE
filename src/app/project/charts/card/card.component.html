@@ -1,7 +1,7 @@
 <!--card.component.html-->
-<mat-card class="dashboard-card">
+<mat-card class="dashboard-card" style.background-color ="{{bgColor}}">
   <mat-card-header>
-      <mat-card-title>
+      <mat-card-title style.color ="{{titleColor}}" >
           {{title}}
           <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
               <mat-icon>more_vert</mat-icon>

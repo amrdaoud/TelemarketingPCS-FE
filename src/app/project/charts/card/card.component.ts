@@ -12,5 +12,7 @@ import {MatMenuModule} from '@angular/material/menu';
 })
 export class CardComponent {
   @Input() title: string;
+  @Input() bgColor: string;
+  @Input() titleColor: string;
 
 }

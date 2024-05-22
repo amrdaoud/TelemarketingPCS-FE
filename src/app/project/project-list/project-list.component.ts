@@ -95,10 +95,10 @@ handlePageEvent(event: PageEvent){
   this.pageIndex = event.pageIndex;
   this.projectFilter.pageIndex = event.pageIndex;
   this.projectFilter.pageSize=event.pageSize;
-  this.projectFilter.dateFrom = this.advanceFilter.dateFrom;
-  this.projectFilter.dateTo = this.advanceFilter.dateTo;
-  this.projectFilter.createdBy = this.advanceFilter.createdBy;
-  this.projectFilter.typeIds = this.advanceFilter.typeIds;
+  this.projectFilter.dateFrom = this.advanceFilter!=null? this.advanceFilter.dateFrom :null;
+  this.projectFilter.dateTo = this.advanceFilter!=null? this.advanceFilter.dateTo :null;
+  this.projectFilter.createdBy = this.advanceFilter!=null? this.advanceFilter.createdBy :null;
+  this.projectFilter.typeIds = this.advanceFilter!=null? this.advanceFilter.typeIds : null;
 
    this.getProjects(this.projectFilter)
 }

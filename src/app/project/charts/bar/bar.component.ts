@@ -37,6 +37,12 @@ export class BarComponent implements OnInit {
             data: ['542', '542', '536', '327', '17',
 									 '0.00', '538', '541'],
             backgroundColor: 'limegreen'
+          },
+          {
+            label: "Bundel",
+            data: ['200', '125', '536', '699', '110',
+									 '17', '250', '530'],
+            backgroundColor: '#F40B93'
           }
         ]
       },

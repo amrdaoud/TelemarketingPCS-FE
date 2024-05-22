@@ -2,14 +2,17 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { DataWithSize, FilterModel } from '../common/generic';
 import { BehaviorSubject, Observable, catchError, finalize, throwError } from 'rxjs';
-import { employeeList, projectDetails, projectDetailsList, projectListDto, typeList } from './project.const';
+import { DashboardFilter, StatisticsReportViewModel, employeeList, projectDetails, projectDetailsList, projectListDto, statusCard, typeList } from './project.const';
 import { environment } from '../../environments/environment';
+import { formatDate } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpService {
   private url = environment.apiUrl+'Projects/';
+  private dashboardUrl = environment.apiUrl+'ProjectsStatistics/';
+
   private httpClient = inject(HttpClient);
   constructor() { }
 
@@ -38,6 +41,7 @@ export class HttpService {
     get redistributedList$(): Observable<boolean> {
       return this.redistributedList.asObservable();
     }
+
 
 
     getProjects(filterM:FilterModel):Observable<{ data: projectListDto[]; dataSize: number }>
@@ -125,6 +129,15 @@ export class HttpService {
   updateProjectDetail(projectDetail:projectDetails):Observable<any>
   {
     return this.httpClient.put(this.url+"updateProjectDetail",projectDetail)
+  }
+
+
+  getStatistics(input:DashboardFilter):Observable<StatisticsReportViewModel>
+  {
+     return this.httpClient.get<StatisticsReportViewModel>(this.dashboardUrl+
+      "getProjectStatistics?projectId="+input.projectId+"&dateFrom="
+      +formatDate(input.dateFrom,'yyyy-MM-dd', "en-US")+"&dateTo="+formatDate(input.dateTo,'yyyy-MM-dd', "en-US")
+     )
   }
 
 }

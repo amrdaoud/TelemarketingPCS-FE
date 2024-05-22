@@ -11,18 +11,30 @@ import { DataTableComponent } from '../charts/data-table/data-table.component';
 //----------------------------------------------
 import {MatGridListModule} from '@angular/material/grid-list';
 import {NumberCounterComponent} from './../charts/number-counter/number-counter.component';
+import {MatTableModule} from '@angular/material/table';
+import {MatCardModule} from '@angular/material/card';
+import { MatBottomSheet,MatBottomSheetModule, MatBottomSheetRef,} from '@angular/material/bottom-sheet';
+import {MatListModule} from '@angular/material/list';
+import {MatButtonModule} from '@angular/material/button';
+import { DashboardFilterComponent } from '../dashboard-filter/dashboard-filter.component';
+import {MatIconModule} from '@angular/material/icon';
+import { HttpService } from '../http.service';
+import { StatisticsReportViewModel, statusCard } from '../project.const';
 
 @Component({
   selector: 'app-allcharts',
   standalone: true,
   imports: [MatGridListModule,CommonModule,CardComponent,BarComponent,LineComponent,
-    PieComponent,RadarComponent,DataTableComponent,NumberCounterComponent],
+    PieComponent,RadarComponent,DataTableComponent,NumberCounterComponent,
+    MatTableModule,MatCardModule,MatBottomSheetModule,MatButtonModule, MatBottomSheetModule,MatIconModule],
   templateUrl: './allcharts.component.html',
   styleUrl: './allcharts.component.scss'
 })
 export class AllchartsComponent implements OnInit {
-  constructor(){}
+  constructor(private _bottomSheet: MatBottomSheet ,protected  projectService:HttpService) {}
 
+  projectDetails:StatisticsReportViewModel;
+  fake:statusCard[]=[{status:'open',GSMCount:10},{status:'open',GSMCount:10},{status:'open',GSMCount:10},{status:'open',GSMCount:10},{status:'open',GSMCount:10}]
   ngOnInit(): void {
 
   }
@@ -34,7 +46,7 @@ export class AllchartsComponent implements OnInit {
       if (matches) {
         return {
           columns: 1,
-          miniCard: { cols: 1, rows: 1 },
+          miniCard: { cols: 4, rows: 1 },
           chart: { cols: 1, rows: 2 },
           table: { cols: 1, rows: 4 },
         };
@@ -81,4 +93,19 @@ export class AllchartsComponent implements OnInit {
 
     }
   ];
+
+  openBottomSheet(): void {
+   const bottom= this._bottomSheet.open(DashboardFilterComponent);
+   bottom.afterDismissed().subscribe(result => {
+    this.projectDetails=result;
+
+   })
+
+
+
+
+  }
+
+
 }
+

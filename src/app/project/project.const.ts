@@ -70,3 +70,27 @@ export interface NotificationListViewModel
   duration:string;
   img:string;
 }
+
+export interface DashboardFilter
+{
+  projectId:number;
+  dateFrom:Date;
+  dateTo:Date;
+}
+
+export interface StatisticsReportViewModel
+{
+  projectName:string;
+  createdBy : string;
+  totalGSMCount : number;
+  quota : number;
+  dateFrom : Date;
+  dateTo : Date;
+  gSMStatusStatistics : statusCard[];
+}
+
+export class statusCard
+{
+  status : string
+  GSMCount : number;
+}

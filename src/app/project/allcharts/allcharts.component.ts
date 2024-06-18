@@ -1,6 +1,6 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, SimpleChanges, ViewChild, inject } from '@angular/core';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import {CardComponent} from '../charts/card/card.component';
 import{BarComponent} from '../charts/bar/bar.component';
@@ -19,24 +19,52 @@ import {MatButtonModule} from '@angular/material/button';
 import { DashboardFilterComponent } from '../dashboard-filter/dashboard-filter.component';
 import {MatIconModule} from '@angular/material/icon';
 import { HttpService } from '../http.service';
-import { StatisticsReportViewModel, statusCard } from '../project.const';
+import { StatisticsReportViewModel, categoryCounter, statusCard } from '../project.const';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
-
+import { NgxCaptureService } from 'ngx-capture';
+import { NgxCaptureModule } from 'ngx-capture';
+import { Subscription } from 'rxjs';
+import { LocalStorageService } from '../local-storage.service';
 @Component({
   selector: 'app-allcharts',
   standalone: true,
   imports: [MatGridListModule,CommonModule,CardComponent,BarComponent,LineComponent,
     PieComponent,RadarComponent,DataTableComponent,NumberCounterComponent,
     MatTableModule,MatCardModule,MatBottomSheetModule,MatButtonModule,
-     MatBottomSheetModule,MatIconModule,MatProgressBarModule],
+     MatBottomSheetModule,MatIconModule,MatProgressBarModule,NgxCaptureModule],
   templateUrl: './allcharts.component.html',
   styleUrl: './allcharts.component.scss'
 })
 export class AllchartsComponent implements OnInit {
-  constructor(private _bottomSheet: MatBottomSheet ,protected  projectService:HttpService) {}
+  imgBase64 = '';
+  @ViewChild('screen', { static: true }) screen: any;
 
-  projectDetails:StatisticsReportViewModel;
+  constructor(private _bottomSheet: MatBottomSheet ,protected  projectService:HttpService,
+    private captureService: NgxCaptureService, private localStorageService:LocalStorageService ) {}
+
+  displayedColumns = ['category', 'count'];
+  dataSource : categoryCounter[]=[{category: 'Hydrogen', count: 1,tota:0},
+  {category: 'Helium', count: 4,tota:0},
+  {category: 'Lithium', count: 6,tota:0},
+  {category: 'Beryllium', count: 9,tota:0},
+  {category: 'Boron', count: 10,tota:0},
+  {category: 'Carbon', count: 12,tota:0},
+  {category: 'Nitrogen', count: 14,tota:0},
+  {category: 'Oxygen', count: 15,tota:0},
+  {category: 'Fluorine', count: 18,tota:0},
+  { category: 'Neon', count: 20,tota:0}];
+
+  projectDetails:any;
+  private cacheSubscription: Subscription;
+
+  mainStatistics : categoryCounter[]=[{category: 'Actual Completion', count: 4,tota:200},
+
+  {category: 'Actual Non-Completion', count: 6,tota:200},
+  {category: 'Quota Progress', count: 9,tota:100},
+  {category: 'Telemarketer Count', count: 10,tota:30}]
+
   ngOnInit(): void {
+    this.getLocalStorageData();
   }
 
   private breakpointObserver = inject(BreakpointObserver);
@@ -48,7 +76,7 @@ export class AllchartsComponent implements OnInit {
           columns: 1,
           miniCard: { cols: 4, rows: 1 },
           chart: { cols: 1, rows: 2 },
-          table: { cols: 1, rows: 4 },
+          table: { cols: 1, rows: 2 },
         };
       }
 
@@ -56,7 +84,7 @@ export class AllchartsComponent implements OnInit {
         columns: 4,
         miniCard: { cols: 1, rows: 1 },
         chart: { cols: 2, rows: 2 },
-        table: { cols: 4, rows: 4 },
+        table: { cols: 4, rows: 2 },
       };
     })
   );
@@ -95,14 +123,33 @@ export class AllchartsComponent implements OnInit {
   ];
 
   openBottomSheet(): void {
+
    const bottom= this._bottomSheet.open(DashboardFilterComponent);
    bottom.afterDismissed().subscribe(result => {
     this.projectDetails = result != null ? result.card :this.projectDetails;
-
    })
 
   }
 
+//-------------Page ScreenShoot-----------------
+
+capture() {
+
+    this.captureService.getImage(this.screen.nativeElement, true)
+.pipe(
+  tap(img => {
+
+    this.captureService.downloadImage(img)
+  })
+).subscribe();
+}
+
+getLocalStorageData()
+{
+  this.projectDetails=JSON.parse(this.localStorageService.getItem('dashboardData')).card ;
+
+
+}
 
 }
 

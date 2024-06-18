@@ -18,7 +18,7 @@ import {map, startWith} from 'rxjs/operators';
 import {AsyncPipe} from '@angular/common';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatInputModule} from '@angular/material/input';
-
+import {LocalStorageService} from '../local-storage.service'
 @Component({
   selector: 'app-dashboard-filter',
   standalone: true,
@@ -41,7 +41,8 @@ export class DashboardFilterComponent implements OnInit {
 
   constructor(private _bottomSheetRef: MatBottomSheetRef<DashboardFilterComponent>,
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
-    private fb:FormBuilder , protected projectService:HttpService
+    private fb:FormBuilder , protected projectService:HttpService,
+    private localStorageService:LocalStorageService
   )
 
   {
@@ -68,6 +69,7 @@ export class DashboardFilterComponent implements OnInit {
      this.filterForm.get('projectId').setValue(pid);
     this.projectService.getStatistics(this.filterForm.value).subscribe((res)=>{
      this.data = {card:res , filter:this.filterForm.value}
+      this.checkOnlocalStorage(this.data);
      this._bottomSheetRef.dismiss(this.data);
 
     })
@@ -91,6 +93,15 @@ export class DashboardFilterComponent implements OnInit {
     return this.options.filter(option => option.name.toLowerCase().includes(filterValue));
   }
 
+  checkOnlocalStorage(data:any)
+  {
+    let storage = this.localStorageService.getItem('dashboardData');
+    if(storage!=null)
+      {
+        this.localStorageService.removeItem('dashboardData');
+      }
 
+      this.localStorageService.setItem('dashboardData',JSON.stringify(data))
+  }
 
 }

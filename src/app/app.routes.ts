@@ -46,6 +46,13 @@ export const routes: Routes = [
           import('./home/home.component').then(
             (c) => c.HomeComponent
           )
+      },
+      {
+        path: 'evaluations',
+        loadComponent: () =>
+          import('./project/evaluations/evaluation/evaluation.component').then(
+            (c) => c.EvaluationComponent
+          )
       }
     ],
   },

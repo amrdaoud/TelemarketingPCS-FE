@@ -22,7 +22,7 @@ export const items: IconNavItemWithRoles[] = [
     routerLink: 'home'
   },
   {
-    title: 'Project',
+    title: 'Projects',
     svgIcon: KPI_ICON,
     postition: 'top',
     roles: ['admin','Telemarketer'],
@@ -38,9 +38,35 @@ export const items: IconNavItemWithRoles[] = [
   {
     title: 'Statistics',
     svgIcon: DASHBOARD_ICON,
+    postition: 'top',
     roles: ['admin','Researcher'],
-    routerLink: 'charts',
-  }
+    children: [
+      {
+        title: 'General Report',
+        svgIcon: REPORT_ICON,
+        routerLink: 'charts'
+      },
+      {
+        title: 'Evaluations',
+        svgIcon: KPI_ICON,
+        routerLink: 'evaluations'
+      }
+
+    ],
+  },
+  {
+    title: 'Mistakes area',
+    svgIcon: SUBSET_ICON,
+    postition: 'top',
+    roles: ['admin','Researcher'],
+    children: [
+
+
+    ],
+  },
+
+
+
 
   // {
   //   title: 'Reports',

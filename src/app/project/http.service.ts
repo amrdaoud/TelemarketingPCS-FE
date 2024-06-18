@@ -137,12 +137,13 @@ export class HttpService {
 
   getStatistics(input:DashboardFilter):Observable<StatisticsReportViewModel>
   {
-    this.dashboardLoading.next(true);
 
+    this.dashboardLoading.next(true);
      return this.httpClient.get<StatisticsReportViewModel>(this.dashboardUrl+
       "getProjectStatistics?projectId="+input.projectId+"&dateFrom="
       +formatDate(input.dateFrom,'yyyy-MM-dd', "en-US")+"&dateTo="+formatDate(input.dateTo,'yyyy-MM-dd', "en-US"))
       .pipe(finalize(() => this.dashboardLoading.next(false)));
   }
+
 
 }

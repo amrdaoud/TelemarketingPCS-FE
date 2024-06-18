@@ -1,74 +1,125 @@
+<div  #screen>
 <mat-progress-bar mode="indeterminate" *ngIf="(projectService.dashboardLoading$ | async)"></mat-progress-bar>
-
 @if (projectDetails!=null && projectDetails.gsmStatusStatistics.length!=0)
 {
+  <mat-card   style="margin: 5px;" >
+    <mat-card-header>
 
-<mat-card style="margin: 5px;">
-  <mat-card-header>
-    <mat-card-title>{{projectDetails.projectName}}</mat-card-title>
-    <mat-card-subtitle>{{projectDetails.createdBy}} - {{projectDetails.dateFrom | date}}</mat-card-subtitle>
-  </mat-card-header>
-  <mat-card-content>
+      <mat-card-title>{{projectDetails!=null?projectDetails.projectName:''}}</mat-card-title>
+      <mat-card-subtitle>{{projectDetails!=null?projectDetails.createdBy:''}}  {{projectDetails!=null?projectDetails.dateFrom:'' | date}}</mat-card-subtitle>
+    </mat-card-header>
+    <button mat-button (click)="capture()">
+      <mat-icon>camera_alt</mat-icon>
+    </button>
+    <mat-card-content  >
     <mat-grid-list cols="{{ ( cardLayout | async )?.columns }}" rowHeight="200px">
-
-      <mat-grid-tile  *ngFor="let i of projectDetails.gsmStatusStatistics" [colspan]="( cardLayout | async )?.miniCard.cols"
+      <!--Mini Cards-->
+      <!-- <mat-grid-tile *ngFor="let mc of miniCardData" [colspan]="( cardLayout | async )?.miniCard.cols"
       [rowspan]="( cardLayout | async )?.miniCard.rows">
-      <app-card title={{i.status}}  bgColor="#E8F0F4" titleColor="#972ED1"><div>
-        <app-number-counter
-        [number]="i.gsmCount.toString()"
-        [label]="'Rate'"
-        [duration]="'0.4'"
-        [total]="projectDetails.totalGSMCount.toString()"
-      >
-    </app-number-counter>
-      </div>
-    </app-card>
-    </mat-grid-tile>
+      <app-mini-card [icon]="mc.icon" [title]="mc.title" [value]="mc.value" [color]="mc.color" [isIncrease]="mc.isIncrease" duration="since last month" [percentValue]="mc.percentValue" [isCurrency]="mc. isCurrency"></app-mini-card>
+    </mat-grid-tile> -->
 
 
-    <!--Charts-->
+      <mat-grid-tile *ngFor="let i of mainStatistics" [colspan]="( cardLayout | async )?.miniCard.cols"
+        [rowspan]="( cardLayout | async )?.miniCard.rows">
+        <app-card title="{{i.category}}" bgColor="#E8F0F4" titleColor="#972ED1">
 
-    <!-- <mat-grid-tile [colspan]="( cardLayout | async )?.chart.cols" [rowspan]="( cardLayout | async )?.chart.rows">
-      <app-card title="Monthly Revenue">
-        <app-bar></app-bar>
+          <app-number-counter
+          [number]="i.count.toString()"
+          [label]=""
+          [duration]="'0.4'"
+          [total]="i.tota.toString()"
+        >
+      </app-number-counter>
+
+        </app-card>
+      </mat-grid-tile>
+
+
+      <!--Charts-->
+      <mat-grid-tile [colspan]="( cardLayout | async )?.chart.cols" [rowspan]="( cardLayout | async )?.chart.rows">
+        <app-card title="Calls Data">
+          <section class="example-container mat-elevation-z8" tabindex="0">
+            <table mat-table [dataSource]="dataSource">
+              <!-- Name Column -->
+              <ng-container matColumnDef="category">
+                <th mat-header-cell *matHeaderCellDef> Category </th>
+                <td mat-cell *matCellDef="let element"> {{element.category}} </td>
+              </ng-container>
+
+              <!-- count Column -->
+              <ng-container matColumnDef="count">
+                <th mat-header-cell *matHeaderCellDef> Count </th>
+                <td mat-cell *matCellDef="let element"> {{element.count}} </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+          </section>
+
+        </app-card>
+     </mat-grid-tile>
+
+
+
+     <mat-grid-tile    [colspan]="( cardLayout | async )?.chart.cols" [rowspan]="( cardLayout | async )?.chart.rows">
+      <app-card    title="Calls Chart" >
+        <app-bar ></app-bar>
       </app-card>
-   </mat-grid-tile> -->
+   </mat-grid-tile>
+   <mat-grid-tile [colspan]="( cardLayout | async )?.chart.cols" [rowspan]="( cardLayout | async )?.chart.rows">
+    <app-card title="Telamarketers Productivity">
+      <section class="example-container mat-elevation-z8" tabindex="0">
+        <table mat-table [dataSource]="dataSource">
+          <!-- Name Column -->
+          <ng-container matColumnDef="category">
+            <th mat-header-cell *matHeaderCellDef> Telemarketer </th>
+            <td mat-cell *matCellDef="let element"> {{element.category}} </td>
+          </ng-container>
 
-   <!-- <mat-grid-tile [colspan]="( cardLayout | async )?.chart.cols" [rowspan]="( cardLayout | async )?.chart.rows">
-    <app-card title="Monthly Revenue">
-     <app-line></app-line>
+          <!-- count Column -->
+          <ng-container matColumnDef="count">
+            <th mat-header-cell *matHeaderCellDef> Productivity </th>
+            <td mat-cell *matCellDef="let element"> {{element.count}} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </section>
+
     </app-card>
- </mat-grid-tile> -->
+  </mat-grid-tile>
 
- <!-- <mat-grid-tile [colspan]="( cardLayout | async )?.chart.cols" [rowspan]="( cardLayout | async )?.chart.rows">
-  <app-card title="Monthly Revenue">
-   <app-pie></app-pie>
-  </app-card>
-</mat-grid-tile> -->
-
-<!-- <mat-grid-tile [colspan]="( cardLayout | async )?.chart.cols" [rowspan]="( cardLayout | async )?.chart.rows">
-  <app-card title="Monthly Revenue">
-   <app-radar></app-radar>
-  </app-card>
-</mat-grid-tile> -->
-    <!--Table-->
-
-  </mat-grid-list>
+  <mat-grid-tile [colspan]="( cardLayout | async )?.chart.cols" [rowspan]="( cardLayout | async )?.chart.rows">
+    <app-card title="Telamarketers Productivity Chart">
+      <app-pie></app-pie>
+    </app-card>
+  </mat-grid-tile>
+      <!--Table-->
+      <mat-grid-tile [colspan]="( cardLayout | async )?.table.cols" [rowspan]="( cardLayout | async )?.table.rows">
+        <app-card title="Quota Progress">
+         <app-line></app-line>
+        </app-card>
+      </mat-grid-tile>
+    </mat-grid-list>
   </mat-card-content>
 
   <mat-card-actions>
+
   </mat-card-actions>
 
 </mat-card>
-
-
 }
+
 @else if(projectDetails!=null && projectDetails.gsmStatusStatistics.length==0) {
 
   <div style="text-align: center;">
   <h3 style="color: red;">No data found</h3>
   </div>
 }
+
     <!-- <mat-card style="margin: 5px; overflow:auto;display: flex;">
       <app-data-table></app-data-table>
     </mat-card> -->
@@ -81,3 +132,4 @@
       </button>
 
     </div>
+  </div>

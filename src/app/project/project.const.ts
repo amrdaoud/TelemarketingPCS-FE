@@ -94,3 +94,10 @@ export class statusCard
   status : string
   gsmCount : number;
 }
+
+export class categoryCounter
+{
+  category:string;
+  count:number;
+  tota:number;
+}

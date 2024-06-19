@@ -47,7 +47,7 @@ export const items: IconNavItemWithRoles[] = [
         routerLink: 'charts'
       },
       {
-        title: 'Evaluations',
+        title: 'Targets',
         svgIcon: KPI_ICON,
         routerLink: 'evaluations'
       }
@@ -64,7 +64,16 @@ export const items: IconNavItemWithRoles[] = [
 
     ],
   },
+  {
+    title: 'Evaluations',
+    svgIcon: COUNTER_ICON,
+    postition: 'top',
+    roles: ['admin','Researcher'],
+    children: [
 
+
+    ],
+  },
 
 
 

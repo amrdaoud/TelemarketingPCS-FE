@@ -8,17 +8,18 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
 import { HttpService } from '../../http.service';
 import { FilterModel } from '../../../common/generic';
-import { employeeList, projectListDto } from '../../project.const';
+import { employeeList, projectListDto, targetReport } from '../../project.const';
 import { Observable, map, startWith } from 'rxjs';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
+import {MatTableModule} from '@angular/material/table';
 
 @Component({
   selector: 'app-evaluation',
   standalone: true,
   imports: [MatGridListModule,MatCardModule,ReactiveFormsModule,MatButtonModule,
-    MatFormFieldModule,MatSelectModule,MatAutocompleteModule,CommonModule,FormsModule,MatInputModule],
+    MatFormFieldModule,MatSelectModule,MatAutocompleteModule,CommonModule,FormsModule,MatInputModule,MatTableModule],
   templateUrl: './evaluation.component.html',
   styleUrl: './evaluation.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -32,9 +33,10 @@ myControl = new FormControl('');
 options: projectListDto[];
 filteredOptions: Observable<projectListDto[]>;
 employeeData:employeeList[];
-
-
-
+selectedTeleName : string;
+selectedTeleId:number;
+targetData:targetReport={target:3.5,avgCall:11.5,data:[{status:'Complated',totalHour:123.32,hourPercentage:37,rate:22.11}]}
+displayedColumns: string[] = ['status', 'totalHour','hourPercentage','rate'];
 
 constructor(private fb:FormBuilder , private httpService:HttpService){
 
@@ -46,14 +48,16 @@ constructor(private fb:FormBuilder , private httpService:HttpService){
   ngOnInit(): void {
     this.getProjects();
     this.getEmployeeList();
-
   }
 
 onSubmit()
 {
   let pid=this.projects.filter(x=>x.name===this.myControl.value)[0].id;
   this.filterForm.get('projectId').setValue(pid);
+  this.selectedTeleName = this.employeeData.filter((x)=>x.id == this.selectedTeleId)[0].userName;
   console.log(this.filterForm.value)
+ console.log(this.selectedTeleName)
+
 }
 getProjects()
 {
@@ -81,4 +85,9 @@ getEmployeeList()
   }
   )
 }
+
+getTotalCost() {
+  return this.targetData.data.map(t => t.totalHour).reduce((acc, value) => acc + value, 0);
+}
+
 }

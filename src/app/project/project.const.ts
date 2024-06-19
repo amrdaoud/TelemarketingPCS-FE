@@ -101,3 +101,18 @@ export class categoryCounter
   count:number;
   tota:number;
 }
+
+export interface targetViewModel
+{
+  status:string;
+  totalHour:number;
+  hourPercentage:number;
+  rate:number;
+}
+
+export interface  targetReport
+{
+  target:number;
+  avgCall:number;
+  data:targetViewModel[];
+}

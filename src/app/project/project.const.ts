@@ -116,3 +116,22 @@ export interface  targetReport
   avgCall:number;
   data:targetViewModel[];
 }
+
+export interface mistakeViewModel
+{
+  surveyName:string; //projectName
+  surveyId:number;
+  telemarketerName:string;
+  telemarketerId:number;
+  mistakeType:string;
+  mistakeTypeId:string;
+  gsm:string;
+  serial:string;
+  questionNumber:string;
+  segment:string;
+  description:string;
+  wieght:string;
+  controller:string;  //project type
+  controllerId:number;
+  adminRemark:string;
+}

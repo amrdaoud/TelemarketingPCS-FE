@@ -24,4 +24,5 @@ export class FilterModel
   dateTo : Date;
   createdBy : string[];
   typeIds : number[];
+  projectId?:number;
 }

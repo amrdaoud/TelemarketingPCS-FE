@@ -55,7 +55,7 @@ export const items: IconNavItemWithRoles[] = [
     ],
   },
   {
-    title: 'Mistakes area',
+    title: 'Mistake Report',
     svgIcon: SUBSET_ICON,
     postition: 'top',
     roles: ['admin','Researcher'],

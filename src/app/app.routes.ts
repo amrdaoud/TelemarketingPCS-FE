@@ -53,7 +53,29 @@ export const routes: Routes = [
           import('./project/evaluations/evaluation/evaluation.component').then(
             (c) => c.EvaluationComponent
           )
-      }
+      },
+      {
+        path: 'mistakes/:id',
+        loadComponent: () =>
+          import('./project/mistakes/mistak-table/mistak-table.component').then(
+            (c) => c.MistakTableComponent
+          )
+      },
+      {
+        path: 'create-mistake',
+        loadComponent: () =>
+          import('./project/mistakes/create-mistake/create-mistake.component').then(
+            (c) => c.CreateMistakeComponent
+          )
+      },
+      {
+        path: 'edit-mistake/:id',
+        loadComponent: () =>
+          import('./project/mistakes/update-mistake/update-mistake.component').then(
+            (c) => c.UpdateMistakeComponent
+          )
+      },
+
     ],
   },
   {

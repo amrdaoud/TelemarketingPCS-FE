@@ -26,13 +26,15 @@ import { AccountService } from '../../app-core/services/account.service';
 import { NotificationService } from '../notification.service';
 import { DistributeDialoComponent } from '../distribute-dialo/distribute-dialo.component';
 import { FilterDialogComponent } from '../filter-dialog/filter-dialog.component';
+import {MatMenuModule} from '@angular/material/menu';
 
 
 @Component({
   selector: 'app-project-list',
   standalone: true,
   imports: [MatPaginatorModule,CommonModule,RouterOutlet,MatTableModule,MatInputModule,MatFormFieldModule,
-  MatSortModule,MatCardModule,MatButtonModule,MatIconModule,MatProgressBarModule,RouterLink,MatSnackBarModule],
+  MatSortModule,MatCardModule,MatButtonModule,MatIconModule,MatProgressBarModule,RouterLink,
+  MatSnackBarModule,MatMenuModule],
     providers:[DatePipe],
   templateUrl: './project-list.component.html',
   styleUrl: './project-list.component.scss'

@@ -5,7 +5,7 @@
   </mat-card-header>
   <mat-card-content >
     <div style = "display: flex; justify-content:flex-end;margin: 10px;">
-      <button  [routerLink]="'/create-mistake'" mat-button color="primary">
+      <button  routerLink="/create-mistake/{{projectId}}" mat-button color="primary">
         <mat-icon >my_library_add  </mat-icon>
 
       </button>
@@ -74,7 +74,7 @@
         </ng-container>
 
         <ng-container matColumnDef="description">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header (click)="sortByheader('Description')"> Segment </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header (click)="sortByheader('Description')"> Description </th>
           <td mat-cell *matCellDef="let row"> {{row.description}} </td>
         </ng-container>
 

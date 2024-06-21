@@ -62,7 +62,7 @@ export const routes: Routes = [
           )
       },
       {
-        path: 'create-mistake',
+        path: 'create-mistake/:id',
         loadComponent: () =>
           import('./project/mistakes/create-mistake/create-mistake.component').then(
             (c) => c.CreateMistakeComponent

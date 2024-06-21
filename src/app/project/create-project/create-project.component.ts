@@ -75,7 +75,6 @@ export class CreateProjectComponent implements OnInit
     this.getEmployeeList();
     this.getProjectType();
 
-
   }
 
 

@@ -122,8 +122,8 @@ applyFilter(event: Event) {
 }
 
 openDialog(id:number,enterAnimationDuration: string, exitAnimationDuration: string): void {
-  this.dialog.open(DialogMistakeComponent, {data:id,
-    width: '250px',
+  this.dialog.open( MistakeFilterDialogComponent, {data:id,
+    width: '500px',
     enterAnimationDuration,
     exitAnimationDuration,
   })
@@ -186,8 +186,8 @@ exportexcel(): void
 
 
   openFilterDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
-    const dialogRef = this.dialog.open(MistakeFilterDialogComponent, {data:this.mistakeFilter,
-      width: '300px',
+    const dialogRef = this.dialog.open(DialogMistakeComponent, {data:this.mistakeFilter,
+      width: '500px',
       enterAnimationDuration,
       exitAnimationDuration,
     });

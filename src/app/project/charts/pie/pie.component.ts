@@ -1,32 +1,47 @@
 import { BaseChartDirective } from 'ng2-charts';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import Chart from 'chart.js/auto';
+import { LocalStorageService } from '../../local-storage.service';
+import { BehaviorSubject } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-pie',
   standalone: true,
-  imports: [BaseChartDirective],
+  imports: [BaseChartDirective,CommonModule],
   templateUrl: './pie.component.html',
   styleUrl: './pie.component.scss'
 })
-export class PieComponent implements OnInit{
-  public chart: any;
+export class PieComponent implements OnInit ,OnChanges ,AfterViewInit{
+  protected chartPie = new BehaviorSubject<any>(null);
+  @Input() xPieLineData :string[];
+  @Input() yPieLineData : number[];
+  projectDetails:any;
 
   constructor() {
   }
-  ngOnInit(): void {
-    this.createChart();
-  }
-  createChart(){
 
-    this.chart = new Chart("PieChart", {
+  ngAfterViewInit(): void {
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.xLineData && changes.yLineData) {
+
+      this.createChart(this.xPieLineData,this.yPieLineData)
+    }
+    }
+  ngOnInit(): void {
+
+    this.createChart(this.xPieLineData,this.yPieLineData)
+
+  }
+  createChart(xLineData:string[],yLineData:number[]){
+    this.chartPie.next(new Chart("PieChart", {
       type: 'doughnut', //this denotes tha type of chart
 
       data: {// values on X-Axis
-        labels: ['Hydrogen','Helium', 'Lithium', 'Beryllium','Boron',
-								 'Carbon', 'Nitrogen', 'Oxygen','Fluorine', 'Neon'],
+        labels: xLineData,
         datasets: [{
-          label: '', data: [1,4,6,9,10,12,14,15,18,20],
+          label: '', data: yLineData,
             backgroundColor: [
               'rgba(255, 99, 132, 0.2)',
               'rgba(255, 159, 64, 0.2)',
@@ -53,7 +68,7 @@ export class PieComponent implements OnInit{
         maintainAspectRatio: false
       }
 
-    });
+    }));
   }
 
 

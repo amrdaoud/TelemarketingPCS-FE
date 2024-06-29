@@ -1,12 +1,12 @@
 <div  #screen>
 <mat-progress-bar mode="indeterminate" *ngIf="(projectService.dashboardLoading$ | async)"></mat-progress-bar>
-@if (projectDetails!=null && projectDetails.gsmStatusStatistics.length!=0)
+@if (projectDetails!=null)
 {
   <mat-card   style="margin: 5px;" >
     <mat-card-header>
 
       <mat-card-title>{{projectDetails!=null?projectDetails.projectName:''}}</mat-card-title>
-      <mat-card-subtitle>{{projectDetails!=null?projectDetails.createdBy:''}}  {{projectDetails!=null?projectDetails.dateFrom:'' | date}}</mat-card-subtitle>
+      <mat-card-subtitle>{{projectDetails!=null?projectDetails.createdBy:''}}  {{projectDetails!=null?projectDetails.createdAt:'' | date}}</mat-card-subtitle>
     </mat-card-header>
     <button mat-button (click)="capture()">
       <mat-icon>camera_alt</mat-icon>
@@ -20,15 +20,15 @@
     </mat-grid-tile> -->
 
 
-      <mat-grid-tile *ngFor="let i of mainStatistics" [colspan]="( cardLayout | async )?.miniCard.cols"
+      <mat-grid-tile *ngFor="let i of projectDetails.projectGeneralDetails" [colspan]="( cardLayout | async )?.miniCard.cols"
         [rowspan]="( cardLayout | async )?.miniCard.rows">
         <app-card title="{{i.category}}" bgColor="#E8F0F4" titleColor="#972ED1">
 
           <app-number-counter
-          [number]="i.count.toString()"
+          [number]="i.count"
           [label]=""
           [duration]="'0.4'"
-          [total]="i.tota.toString()"
+          [total]="i.total"
         >
       </app-number-counter>
 
@@ -65,13 +65,13 @@
 
      <mat-grid-tile    [colspan]="( cardLayout | async )?.chart.cols" [rowspan]="( cardLayout | async )?.chart.rows">
       <app-card    title="Calls Chart" >
-        <app-bar ></app-bar>
+        <app-bar [xLineData]="xLineBar" [yLineData]="yLineBar" ></app-bar>
       </app-card>
    </mat-grid-tile>
    <mat-grid-tile [colspan]="( cardLayout | async )?.chart.cols" [rowspan]="( cardLayout | async )?.chart.rows">
     <app-card title="Telamarketers Productivity">
       <section class="example-container mat-elevation-z8" tabindex="0">
-        <table mat-table [dataSource]="dataSource">
+        <table mat-table [dataSource]="productivitySource">
           <!-- Name Column -->
           <ng-container matColumnDef="category">
             <th mat-header-cell *matHeaderCellDef> Telemarketer </th>
@@ -94,7 +94,7 @@
 
   <mat-grid-tile [colspan]="( cardLayout | async )?.chart.cols" [rowspan]="( cardLayout | async )?.chart.rows">
     <app-card title="Telamarketers Productivity Chart">
-      <app-pie></app-pie>
+      <app-pie [xPieLineData]="xLinePie" [yPieLineData]="yLinePie"></app-pie>
     </app-card>
   </mat-grid-tile>
       <!--Table-->

@@ -1,33 +1,48 @@
 import { BaseChartDirective } from 'ng2-charts';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import Chart from 'chart.js/auto';
+import { CommonModule } from '@angular/common';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-bar',
   standalone: true,
-  imports: [BaseChartDirective],
+  imports: [BaseChartDirective,CommonModule],
   templateUrl: './bar.component.html',
   styleUrl: './bar.component.scss'
 })
-export class BarComponent implements OnInit {
+export class BarComponent implements OnInit ,OnChanges ,AfterViewInit {
+  projectDetails:any;
+  protected chart = new BehaviorSubject<any>(null);
+  @Input() xLineData :string[];
+  @Input() yLineData : number[];
 
-  public chart: any;
   constructor() {
-  }
-  ngOnInit(): void {
-    this.createChart();
-  }
-  createChart(){
 
-    this.chart = new Chart("BarChart", {
+  }
+  ngAfterViewInit(): void {
+  }
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.xLineData && changes.yLineData) {
+
+      this.createChart(this.xLineData,this.yLineData)
+    }
+  }
+
+  ngOnInit(): void {
+    this.createChart(this.xLineData,this.yLineData)
+
+  }
+  createChart(xLineData:string[],yLineData:number[]){
+
+    this.chart.next(new Chart("BarChart", {
       type: 'bar', //this denotes tha type of chart
 
       data: {// values on X-Axis
-        labels: ['Hydrogen','Helium', 'Lithium', 'Beryllium','Boron',
-								 'Carbon', 'Nitrogen', 'Oxygen','Fluorine', 'Neon'],
+        labels: xLineData,
 	       datasets: [
           {
-            label: '', data: [1,4,6,9,10,12,14,15,18,20],
+            label: '', data: yLineData,
             backgroundColor: [
               'rgba(255, 99, 132, 0.2)',
               'rgba(255, 159, 64, 0.2)',
@@ -57,8 +72,9 @@ export class BarComponent implements OnInit {
         maintainAspectRatio: false
       }
 
-    });
+    }));
   }
+
 
 
 

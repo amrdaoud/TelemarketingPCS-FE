@@ -1,34 +1,50 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import Chart from 'chart.js/auto';
 import { BaseChartDirective } from 'ng2-charts';
+import { LocalStorageService } from '../../local-storage.service';
+import { BehaviorSubject } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-line',
   standalone: true,
-  imports: [BaseChartDirective],
+  imports: [BaseChartDirective,CommonModule],
   templateUrl: './line.component.html',
   styleUrl: './line.component.scss'
 })
-export class LineComponent  implements OnInit{
+export class LineComponent  implements  OnInit ,OnChanges ,AfterViewInit{
+
+  projectDetails:any;
+  protected chart = new BehaviorSubject<any>(null);
+  @Input() xLineData :string[];
+  @Input() yLineData : number[];
+
+   constructor(){}
+
+  ngAfterViewInit(): void {
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.xLineData && changes.yLineData) {
+
+      this.createChart(this.xLineData,this.yLineData)
+    }
+  }
   ngOnInit(): void {
-    this.createChart();
+    this.createChart(this.xLineData,this.yLineData)
 
   }
-  public chart: any;
 
-  createChart(){
+  createChart(xLineData:string[],yLineData:number[]){
 
-    this.chart = new Chart("lineChart", {
+    this.chart.next( new Chart("lineChart", {
       type: 'line', //this denotes tha type of chart
 
       data: {// values on X-Axis
-        labels: ['2022-05-10', '2022-05-11', '2022-05-12','2022-05-13',
-								 '2022-05-14', '2022-05-15', '2022-05-16','2022-05-17', ],
+        labels: xLineData,
 	       datasets: [
           {
             label: "Quota Progress",
-            data: ['10','12', '7', '5', '13',
-								 '8', '20', '7'],
+            data: yLineData,
                  backgroundColor: [
                   'rgba(255, 99, 132, 0.2)',
                   'rgba(255, 159, 64, 0.2)',
@@ -57,8 +73,9 @@ export class LineComponent  implements OnInit{
 
       }
 
-    });
+    }));
   }
+
 
 
 }

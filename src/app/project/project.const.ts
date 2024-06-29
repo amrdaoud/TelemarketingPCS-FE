@@ -82,11 +82,10 @@ export interface StatisticsReportViewModel
 {
   projectName:string;
   createdBy : string;
-  totalGSMCount : number;
-  quota : number;
-  dateFrom : Date;
-  dateTo : Date;
-  gsmStatusStatistics : statusCard[];
+  projectGeneralDetails:categoryCounter[];
+  callStatuses:categoryCounter[];
+  telemarketersProductivity:categoryCounter[];
+  completedQuotaPerDays:progressQuotaVm[];
 }
 
 export class statusCard
@@ -134,4 +133,18 @@ export interface mistakeViewModel
   controller:string;  //project type
   controllerId:number;
   adminRemark:string;
+}
+
+export interface progressQuotaVm
+{
+  date:Date;
+  count:number;
+}
+
+export interface generalDashboard
+{
+  projectGeneralDetails:categoryCounter[];
+  callStatuses:categoryCounter[];
+  telemarketersProductivity:categoryCounter[];
+  completedQuotaPerDays:progressQuotaVm[];
 }

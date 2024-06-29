@@ -25,6 +25,7 @@ import { NgxCaptureService } from 'ngx-capture';
 import { NgxCaptureModule } from 'ngx-capture';
 import { Subscription } from 'rxjs';
 import { LocalStorageService } from '../local-storage.service';
+
 @Component({
   selector: 'app-allcharts',
   standalone: true,
@@ -35,7 +36,7 @@ import { LocalStorageService } from '../local-storage.service';
   templateUrl: './allcharts.component.html',
   styleUrl: './allcharts.component.scss'
 })
-export class AllchartsComponent implements OnInit {
+export class AllchartsComponent implements OnInit  {
   imgBase64 = '';
   @ViewChild('screen', { static: true }) screen: any;
 
@@ -43,28 +44,18 @@ export class AllchartsComponent implements OnInit {
     private captureService: NgxCaptureService, private localStorageService:LocalStorageService ) {}
 
   displayedColumns = ['category', 'count'];
-  dataSource : categoryCounter[]=[{category: 'Hydrogen', count: 1,tota:0},
-  {category: 'Helium', count: 4,tota:0},
-  {category: 'Lithium', count: 6,tota:0},
-  {category: 'Beryllium', count: 9,tota:0},
-  {category: 'Boron', count: 10,tota:0},
-  {category: 'Carbon', count: 12,tota:0},
-  {category: 'Nitrogen', count: 14,tota:0},
-  {category: 'Oxygen', count: 15,tota:0},
-  {category: 'Fluorine', count: 18,tota:0},
-  { category: 'Neon', count: 20,tota:0}];
-
+  dataSource : categoryCounter[]=[];
+  productivitySource : categoryCounter[]=[];
   projectDetails:any;
-  private cacheSubscription: Subscription;
-
-  mainStatistics : categoryCounter[]=[{category: 'Actual Completion', count: 4,tota:200},
-
-  {category: 'Actual Non-Completion', count: 6,tota:200},
-  {category: 'Quota Progress', count: 9,tota:100},
-  {category: 'Telemarketer Count', count: 10,tota:30}]
-
+  xLineBar:string[];
+  yLineBar:number[];
+  xLinePie:string[];
+  yLinePie:number[];
+  xLineLine:string[];
+  yLineLine:number[];
   ngOnInit(): void {
     this.getLocalStorageData();
+
   }
 
   private breakpointObserver = inject(BreakpointObserver);
@@ -89,44 +80,21 @@ export class AllchartsComponent implements OnInit {
     })
   );
 
-  counters = [
-    {
-      id: "002",
-      label: "Customers served ",
-      number: "2000",
-      duration: "0.4",
-      cardTitle:"Project"
 
-    },
-    {
-      id: "003",
-      label: "Current customers",
-      number: "1400",
-      duration: "0.4",
-      cardTitle:"Customers"
-    },
-    {
-      id: "004",
-      label: "customer Complaints",
-      number: "250",
-      duration: "0.4",
-      cardTitle:"Complaints"
-    },
-    {
-      id: "004",
-      label: "Syriatel telemarketers",
-      number: "250",
-      duration: "0.4",
-      cardTitle:"Telemarketers"
-
-    }
-  ];
 
   openBottomSheet(): void {
 
    const bottom= this._bottomSheet.open(DashboardFilterComponent);
    bottom.afterDismissed().subscribe(result => {
     this.projectDetails = result != null ? result.card :this.projectDetails;
+    this.dataSource = this.projectDetails.callStatuses
+    this.productivitySource = this.projectDetails.telemarketersProductivity;
+    this.xLineBar = this.projectDetails.callStatuses.map((x)=>x.category)
+    this.yLineBar = this.projectDetails.callStatuses.map((x)=>x.count)
+    this.xLinePie = this.projectDetails.telemarketersProductivity.map((x)=>x.category)
+    this.yLinePie = this.projectDetails.telemarketersProductivity.map((x)=>x.count)
+    this.xLineLine = this.projectDetails.completedQuotaPerDays.map((x)=>x.date)
+    this.yLineLine = this.projectDetails.completedQuotaPerDays.map((x)=>x.count)
    })
 
   }
@@ -147,8 +115,14 @@ capture() {
 getLocalStorageData()
 {
   this.projectDetails=JSON.parse(this.localStorageService.getItem('dashboardData')).card ;
-
-
+  this.dataSource = this.projectDetails.callStatuses;
+  this.productivitySource = this.projectDetails.telemarketersProductivity;
+  this.xLineBar = this.projectDetails.callStatuses.map((x)=>x.category)
+  this.yLineBar = this.projectDetails.callStatuses.map((x)=>x.count)
+  this.xLinePie = this.projectDetails.telemarketersProductivity.map((x)=>x.category)
+  this.yLinePie = this.projectDetails.telemarketersProductivity.map((x)=>x.count)
+  this.xLineLine = this.projectDetails.completedQuotaPerDays.map((x)=>x.date)
+  this.yLineLine = this.projectDetails.completedQuotaPerDays.map((x)=>x.count)
 }
 
 }

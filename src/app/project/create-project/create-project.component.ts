@@ -113,7 +113,7 @@ export class CreateProjectComponent implements OnInit
         const headers: string[] = [];
         const columnCount = xls.utils.decode_range(sheet1['!ref'] || '').e.c + 1; // get col count !ref is range A1:G1
         for (let i = 0; i < columnCount; ++i) {
-          headers[i] = sheet1[`${xls.utils.encode_col(i)}1`].v; // get values of 1 col
+          headers[i] = sheet1[`${xls.utils.encode_col(i)}1`].v;
         }
 
             if(!this.uploadExcelValidation(headers))
